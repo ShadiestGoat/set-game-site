@@ -10,11 +10,11 @@
     --spacer-4: 1.5rem;
     --spacer-5: 2rem;
     --spacer-6: 5rem;
-    --blue: #0d6dfd;
+    --blue: #104596;
     --indigo: #6812f3;
     --purple: #6f42c2;
     --pink: #d73385;
-    --red: #dc3848;
+    --red: #d42738;
     --orange: #fd7e17;
     --yellow: #ffc105;
     --green: #198653;
@@ -41,7 +41,7 @@
     --dark-700: #2f2f37;
     --dark-800: #2a2a32;
     --dark-900: #26262c;
-    --primary: var(--blue);
+    --primary: var(--purple);
     --secondary: var(--gray);
     --success: var(--green);
     --info: var(--cyan);
@@ -56,7 +56,8 @@
     --headings-color: var(--white);
     --link-color: var(--white);
     --link-hover-color: #e0e0e0;
-    --body-bg: var(--dark-700);
+    /* shut up i like better this way */
+    --body-bg: var(#1e1e1e);
     --card-bg: var(--dark-500);
     --fill-bg: var(--dark-200);
     --fill-hover-bg: #545463;
@@ -714,7 +715,7 @@
   .btn-primary:focus,
   .btn-primary:hover {
     color: var(--white);
-    background-color: #025ce3;
+    background-color: #5729ac;
   }
   .btn-primary.active,
   .btn-primary.show,
@@ -814,7 +815,7 @@
   .btn-danger:focus,
   .btn-danger:hover {
     color: var(--white);
-    background-color: #c72334;
+    background-color: #ae1c2b;
   }
   .btn-danger.active,
   .btn-danger.show,
@@ -4270,6 +4271,10 @@
   }
   .text-white {
     color: var(--white) !important;
+  }
+  /* custom made baby (text almost white) */
+  .text-awhite {
+    color: rgb(228, 228, 228) !important;
   }
   .text-black {
     color: var(--black) !important;

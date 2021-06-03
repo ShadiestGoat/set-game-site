@@ -106,11 +106,10 @@ export class Game extends Component<{}, State> {
         }
     }
 
-    parseDiff(start:Date, stop:Date) {
+    parseDiff(start:Date, stop:Date, ms:boolean = true) {
         const totTime = stop.getTime() - start.getTime()
         const time = new Date(totTime)
-
-        return `${time.getHours() -1 ? time.getHours() -1 + ' hours, ' : ''}${time.getMinutes() ? time.getMinutes() + ' minutes, ' : ''}${time.getSeconds()} seconds and ${time.getMilliseconds()} ms`
+        return `${time.getHours() -1 ? ((time.getHours() -1).toString().length == 1 ? `0:${time.getHours() -1}` : time.getHours() -1) + ':' : ''}${time.getMinutes() ? (time.getMinutes().toString().length == 1 ? `0${time.getMinutes()}` : time.getMinutes()) : '00'}:${time.getSeconds().toString().length == 1 ? `0${time.getSeconds()}` : time.getSeconds()}${ms ? ':' + time.getMilliseconds() : ''}`
     }
 
     findSet(raw:setCard[]):(false | [number, number, number]) {
@@ -125,6 +124,9 @@ export class Game extends Component<{}, State> {
         }
         return false
     }
+    componentDidMount() {
+        setInterval(() => this.forceUpdate(), 1000)
+   }
 
     findNeededCard(card1:setCard, card2:setCard):(setCard | false) {
         let charN = 0
@@ -374,21 +376,17 @@ export class Game extends Component<{}, State> {
                     <h1 style={{color:"white", textAlign:"center", verticalAlign:"middle"}} className="text-center" height="100vh">
                         Set!
                     </h1>
-                    <p className="text-center">Found sets: {this.state.setsFound.length}</p>
-                    <p className="text-center">Wrong Guesses: {this.state.wrongs}</p>
-                    <p className="text-center">Deck: {this.state.deck.length}</p>
-                    <p className="text-center">Hints used: {this.state.hints}</p>
+                    <p className="text-center text-awhite">Found sets: {this.state.setsFound.length}</p>
+                    <p className="text-center text-awhite">Wrong Guesses: {this.state.wrongs}</p>
+                    <p className="text-center text-awhite">Deck: {this.state.deck.length}</p>
+                    <p className={`text-center ${this.state.hints ? 'text-danger' : 'text-awhite'}`}>Hints used: {this.state.hints}</p>
+                    <p className="text-center text-awhite">Time Used: {this.parseDiff(this.state.timeStarted, new Date, false)}</p>
                     <br />
                     <button className="btn btn-lg w-100 btn-primary" style={{marginBottom: 20}} onClick={(e) => {
                         if (e.button == 0) {
                             this.hint()
                         }
                     }}>Hint</button>
-                    <button className="btn btn-lg w-100 btn-primary" style={{marginBottom: 20}} onClick={(e) => {
-                        if (e.button == 0) {
-                            this.win()
-                        }
-                    }}>Hint :D</button>
                     <br />
                     <button className="btn btn-lg w-100 btn-danger" style={{marginBottom: 20}} onClick={(e) => {
                         if (e.button == 0) {
@@ -421,7 +419,6 @@ export class Game extends Component<{}, State> {
                                                 {
                                                     arrayThing(card[0]).map((val) => {
                                                         return (
-                                                        // <p></p>
                                                         card[1] == "o" ?
                                                         // @ts-ignore
                                                         <Oval stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:4;`} transform={transformations[card[0] + card[1] + val]} />
