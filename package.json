@@ -1,7 +1,7 @@
 {
   "private": true,
-  "name": "painsite",
-  "version": "0.0.0",
+  "name": "setsite",
+  "version": "0.1.0",
   "license": "MIT",
   "scripts": {
     "build": "preact build",
@@ -50,5 +50,5 @@
       "<rootDir>/tests/__mocks__/setupTests.ts"
     ]
   },
-  "_id": "painsite@0.0.0"
+  "_id": "setsite@0.1.0"
 }
