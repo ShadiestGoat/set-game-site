@@ -1,0 +1,25 @@
+:root {
+  background-color: #202124 !important;
+}
+
+.game-card {
+  border-radius: 6px;
+  width: 11vw;
+  height: 31vh;
+  min-width: 100px;
+  min-height: 25px;
+  justify-content: center;
+  overflow-y: hidden;
+}
+
+
+.game-card > svg {
+  display: block;
+  margin: auto;
+  margin-top: 10%;
+  width: 80%;
+}
+
+.gameBoard {
+  min-width: 20vw;
+}

@@ -1,0 +1,159 @@
+:root {
+  --color-bg: #010101;
+  --color-1: #555555;
+  --color-2: rgb(39, 40, 41);
+  --color-3: #1f1f1f;
+  --color-ico: #e6e9eb;
+  --color-highlight: #7795ff;
+  background-color: var(--color-bg);
+}
+
+.col-full {
+  height: 100vh;
+}
+
+.container {
+  display: flex !important;
+  width: 100%;
+  padding-right: var(--spacer-3);
+  padding-left: var(--spacer-3);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: calc(var(--spacer-3) / -1);
+  margin-left: calc(var(--spacer-3) / -1);
+}
+.row > * {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 100%;
+  padding-right: var(--spacer-3);
+  padding-left: var(--spacer-3);
+}
+
+.col {
+  flex: 1 0 0%;
+}
+
+.col-05 {
+  flex: 0 0 auto;
+  width: 4.15%;
+}
+.col-auto {
+  flex: 0 0 auto !important;
+  width: auto !important;
+}
+.col-1 {
+  flex: 0 0 auto;
+  width: 8.33333%;
+}
+.col-2 {
+  flex: 0 0 auto;
+  width: 16.66667%;
+}
+.col-3 {
+  flex: 0 0 auto;
+  width: 25%;
+}
+.col-4 {
+  flex: 0 0 auto;
+  width: 33.33333%;
+}
+.col-5 {
+  flex: 0 0 auto;
+  width: 41.66667%;
+}
+.col-6 {
+  flex: 0 0 auto;
+  width: 50%;
+}
+.col-7 {
+  flex: 0 0 auto;
+  width: 58.33333%;
+}
+.col-8 {
+  flex: 0 0 auto;
+  width: 66.66667%;
+}
+.col-9 {
+  flex: 0 0 auto;
+  width: 75%;
+}
+.col-10 {
+  flex: 0 0 auto;
+  width: 83.33333%;
+}
+.col-11 {
+  flex: 0 0 auto;
+  width: 91.66667%;
+}
+.col-12 {
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+
+.col-05-f {
+  width: 54.79px;
+}
+
+.col-1-f {
+  width: 109.58px;
+}
+.col-2-f {
+  width: 219.17px;
+}
+.col-3-f {
+  width: 328.75px;
+}
+.col-4-f {
+  width: 438.33px;
+}
+.col-5-f {
+  width: 547.9px;
+}
+.col-6-f {
+  width: 657.48px;
+}
+.col-7-f {
+  width: 767.07px;
+}
+.col-8-f {
+  width: 876.65px;
+}
+.col-9-f {
+  width: 986.23px;
+}
+.col-10-f {
+  width: 1095.81px;
+}
+.col-11-f {
+  width: 1205.39px;
+}
+.col-12-f {
+  width: 1314.97px;
+}
+
+
+/* scroll bar */
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f100;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(136, 136, 136, 0.098);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.fw {
+  width: 110%;
+}
