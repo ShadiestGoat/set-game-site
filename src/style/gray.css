@@ -721,7 +721,7 @@
   .btn-primary.show,
   .btn-primary:active {
     color: var(--white);
-    background-color: #0256d4;
+    background-color: #5729ac;
   }
   .btn-primary.disabled,
   .btn-primary:disabled {
@@ -4486,3 +4486,10 @@
   .translate-middle {
     transform: translateX(50%) translateY(50%) !important;
   }
+
+::selection {
+  background: #6d10ff;
+}
+::-moz-selection{
+  background-color: #6d10ff;
+}

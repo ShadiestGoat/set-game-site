@@ -15,7 +15,8 @@ type State = {
     timeStarted:Date,
     won: boolean,
     hints: number,
-    wrongs: number
+    wrongs: number,
+    timeFin: Date | false
 }
 
 export class Game extends Component<{}, State> {
@@ -69,7 +70,8 @@ export class Game extends Component<{}, State> {
             timeStarted: new Date(),
             won: false,
             hints: 0,
-            wrongs: 0
+            wrongs: 0,
+            timeFin: false
         }
     }
 
@@ -197,7 +199,8 @@ export class Game extends Component<{}, State> {
 
     win() {
         this.setState({
-            won: true
+            won: true,
+            timeFin: new Date()
         })
     }
 
@@ -355,7 +358,8 @@ export class Game extends Component<{}, State> {
                 this.state.won ?
                     <div>
                         <h1 className="text-center">You did it! Congrats!</h1>
-                        <h1 className="text-center">Time: {this.parseDiff(this.state.timeStarted, new Date())}</h1>
+                        {/* timeFin has to be a date here */}
+                        <h1 className="text-center">Time: {this.parseDiff(this.state.timeStarted, this.state.timeFin as Date)}</h1>
                         <h1 className="text-center">Hints used: {this.state.hints}</h1>
                         <h1 className="text-center">Wrong guesses: {this.state.wrongs}</h1>
 
