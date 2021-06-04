@@ -1,6 +1,6 @@
 import {Component, h} from "preact"
 import { rand } from "../../tools"
-import { arrayThing, boardRow, colorMap, FullDeck, setBoard, setCard, transformations } from "./gameHelper"
+import { arrayThing, boardRow, colorMap, FullDeck, keyMap, setBoard, setCard, transformations } from "./gameHelper"
 import { SetCard } from "./parts/gameCard"
 import { Oval, Rhombus, Squigly } from "./parts/partz/cards"
 
@@ -134,12 +134,11 @@ export class Game extends Component<{}, State> {
             // e.preventDefault()
             if (e.key == 'r') {
                 this.setState(this.initer())
-            } else
-                // if ()
-                {
-
+            } else if (Object.keys(keyMap).includes(e.key)) {
+                const board = this.boardParser()
+                const card = board[keyMap[e.key][0]][keyMap[e.key][1]]
+                this.handleSetSelector(card)
             }
-            console.log(e)
         })
     }
 
@@ -217,7 +216,7 @@ export class Game extends Component<{}, State> {
         })
     }
 
-    handleSetSelector(e:h.JSX.TargetedMouseEvent<HTMLDivElement>, card:setCard) {if (e.button == 0) {
+    handleSetSelector(card:setCard) {
             let newSel = this.state.selected
             const index = this.state.board.indexOf(card)
             newSel[index] = !newSel[index]
@@ -280,12 +279,10 @@ export class Game extends Component<{}, State> {
                 }
             }
             this.setState({selected: newSel, selectedCards: selected, setsFound:found, deck:newDeck, board: board, cols: newCols})
-        }
     }
 
-    render() {
+    boardParser():setCard[][] {
         let LastRow = 0
-        // @ts-ignore
         let board:setCard[][] = []
         let row:setCard[] = []
         this.state.board.forEach((card, index) => {
@@ -298,7 +295,11 @@ export class Game extends Component<{}, State> {
             LastRow = rowI
         })
         board.push(row)
+        return board
+    }
 
+    render() {
+        const board = this.boardParser()
 
         return (
         <div className="container-fluid game-container"
@@ -424,7 +425,7 @@ export class Game extends Component<{}, State> {
                             {row.map((card) => {if (!card) return
                                 return (
                                 <td>
-                                    <div className="game-card" id={card} style={{background: this.state.selectedCards.includes(card) ? 'yellow' : 'wheat'}} onClick={(e) => {this.handleSetSelector(e, card)}}>
+                                    <div className="game-card" id={card} style={{background: this.state.selectedCards.includes(card) ? 'yellow' : 'wheat'}} onClick={(e) => {if (e.button == 0) this.handleSetSelector(card)}}>
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             xmlnsXlink="http://www.w3.org/1999/xlink"
