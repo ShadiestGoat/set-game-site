@@ -16,7 +16,8 @@ type State = {
     won: boolean,
     hints: number,
     wrongs: number,
-    timeFin: Date | false
+    timeFin: Date | false,
+    burner: number
 }
 
 export class Game extends Component<{}, State> {
@@ -71,7 +72,8 @@ export class Game extends Component<{}, State> {
             won: false,
             hints: 0,
             wrongs: 0,
-            timeFin: false
+            timeFin: false,
+            burner: 0
         }
     }
 
@@ -127,8 +129,19 @@ export class Game extends Component<{}, State> {
         return false
     }
     componentDidMount() {
-        setInterval(() => this.forceUpdate(), 1000)
-   }
+        setInterval(() => this.setState({burner: this.state.burner + 1}), 1000)
+        document.addEventListener('keydown', (e) => {
+            // e.preventDefault()
+            if (e.key == 'r') {
+                this.setState(this.initer())
+            } else
+                // if ()
+                {
+
+            }
+            console.log(e)
+        })
+    }
 
     findNeededCard(card1:setCard, card2:setCard):(setCard | false) {
         let charN = 0
@@ -288,7 +301,8 @@ export class Game extends Component<{}, State> {
 
 
         return (
-        <div className="container-fluid game-container" style={{height:"100vh"}}>
+        <div className="container-fluid game-container"
+        style={{height:"100vh"}}>
             <svg width="0" height='0'>
                 <defs>
                     <pattern
@@ -363,7 +377,7 @@ export class Game extends Component<{}, State> {
                         <h1 className="text-center">Hints used: {this.state.hints}</h1>
                         <h1 className="text-center">Wrong guesses: {this.state.wrongs}</h1>
 
-                        <div className="row" style={{marginTop: 250}}>
+                        <div className="row" style={{marginTop: 350}}>
                             <button className="col btn btn-primary" onClick={(e) => {
                             e.preventDefault()
                             e.button == 0 ? this.setState( this.initer() ) : {}
@@ -390,64 +404,54 @@ export class Game extends Component<{}, State> {
                         if (e.button == 0) {
                             this.hint()
                         }
-                    }}>Hint</button>
+                    }} title="Hint (for weaklings)">Hint</button>
                     <br />
                     <button className="btn btn-lg w-100 btn-danger" style={{marginBottom: 20}} onClick={(e) => {
                         if (e.button == 0) {
                             this.setState(this.initer())
                         }
-                    }}>Restart</button>
+                    }} title="Restart the game (r)" >Restart</button>
 
 
                     <p className="warning">{this.state.hintErr}</p>
                     </div>
                     <div className="col gameBoard">
-                        {/* <div className=""> */}
                         <table>
                     {
                     board.map((row) => {
                         return (
                         <tr>
-                            {/* <div className="row" style={{marginTop: '1%'}}> */}
-                                {row.map((card) => {if (!card) return
-                                    return (
-                                    <td>
-                                    {/* <div className="col-2"> */}
-                                        {/* <div className="card" style={{padding: "0"}}> */}
-                                            <div className="game-card" id={card} style={{background: this.state.selectedCards.includes(card) ? 'yellow' : 'wheat'}} onClick={(e) => {this.handleSetSelector(e, card)}}>
-                                                {/* <p>{card}</p> */}
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    xmlnsXlink="http://www.w3.org/1999/xlink"
-                                                    viewBox="0 0 210 360">
-                                                {
-                                                    arrayThing(card[0]).map((val) => {
-                                                        return (
-                                                        card[1] == "o" ?
-                                                        // @ts-ignore
-                                                        <Oval stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:4;`} transform={transformations[card[0] + card[1] + val]} />
-                                                        : card[1] == "r" ?
-                                                        // @ts-ignore
-                                                        <Rhombus transform={transformations[card[0] + card[1] + val]} stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:2;`} /> :
-                                                        // @ts-ignore
-                                                        <Squigly stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:2;`} transform={transformations[card[0] + card[1] + val]} />
-                                                        )
-                                                    })
-                                                }
-                                                </svg>
-                                                {/* <h1>{card}</h1> */}
-                                            </div>
-                                        {/* </div> */}
-                                    </td>
-                                    )
-                                    {/* </div> */}
-                                })}
-                            {/* </div> */}
+                            {row.map((card) => {if (!card) return
+                                return (
+                                <td>
+                                    <div className="game-card" id={card} style={{background: this.state.selectedCards.includes(card) ? 'yellow' : 'wheat'}} onClick={(e) => {this.handleSetSelector(e, card)}}>
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            xmlnsXlink="http://www.w3.org/1999/xlink"
+                                            viewBox="0 0 210 360">
+                                        {
+                                            arrayThing(card[0]).map((val) => {
+                                                return (
+                                                card[1] == "o" ?
+                                                // @ts-ignore
+                                                <Oval stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:4;`} transform={transformations[card[0] + card[1] + val]} />
+                                                : card[1] == "r" ?
+                                                // @ts-ignore
+                                                <Rhombus transform={transformations[card[0] + card[1] + val]} stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:2;`} /> :
+                                                // @ts-ignore
+                                                <Squigly stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:2;`} transform={transformations[card[0] + card[1] + val]} />
+                                                )
+                                            })
+                                        }
+                                        </svg>
+                                    </div>
+                                </td>
+                                )
+                            })}
                         </tr>
                         )
                     })}
                     </table>
-                    {/* </div> */}
                     </div>
                 </div>
             }

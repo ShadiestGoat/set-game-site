@@ -58,9 +58,9 @@ export const transformations = {
     '1o1':'translate(15,98)',
     '2o1':'translate(15,43)',
     '2o2':'translate(15,143)',
-    '3o1':'translate(15,3)',
+    '3o1':'translate(15,2)',
     '3o2':'translate(15,98)',
-    '3o3':'translate(15,193)',
+    '3o3':'translate(15,194)',
 }
 export function arrayThing(num:string) {
     let numArr = []
