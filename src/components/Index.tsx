@@ -1,11 +1,12 @@
 import {Component, h} from "preact"
 import { Game } from "./components/game"
 import { Helmet } from "@notwoods/preact-helmet"
+import { SvgDefs } from "./components/svgDefs"
 
 export class Index extends Component {
     render() {
         return (
-            <div>
+            <div className="rootWrapperAmIRightFellas">
                 <Helmet>
                     <meta content="The set game, recreated by Shady Goat" property="og:title" />
                     <meta content="This is the fun card game 'SET', but recreated as a website made with preact. " property="og:description" />

@@ -3,6 +3,7 @@ import { rand } from "../../tools"
 import { arrayThing, boardRow, colorMap, FullDeck, keyMap, setBoard, setCard, transformations } from "./gameHelper"
 import { SetCard } from "./parts/gameCard"
 import { Oval, Rhombus, Squigly } from "./parts/partz/cards"
+import { SvgDefs } from "./svgDefs"
 
 type State = {
     setsFound: [setCard, setCard, setCard][],
@@ -128,6 +129,7 @@ export class Game extends Component<{}, State> {
         }
         return false
     }
+
     componentDidMount() {
         setInterval(() => this.setState({burner: this.state.burner + 1}), 1000)
         document.addEventListener('keydown', (e) => {
@@ -301,112 +303,45 @@ export class Game extends Component<{}, State> {
         const board = this.boardParser()
 
         return (
-        <div className="container-fluid game-container"
-        style={{height:"100vh"}}>
-            <svg width="0" height='0'>
-                <defs>
-                    <pattern
-                    xlinkHref="#sr"
-                    id="pr"
-                    patternTransform="matrix(-2,0,0,15,-2,-5)"
-                    />
-                    <pattern
-                    patternUnits="userSpaceOnUse"
-                    width="2"
-                    height="1"
-                    patternTransform="translate(0,0) scale(10,10)"
-                    id="sr">
-                    <rect
-                        style={`fill:${colorMap.r};stroke:none`}
-                        x="0"
-                        y="-0.5"
-                        width="1"
-                        height="2"
-                        />
-                    </pattern>
-
-                    <pattern
-                    xlinkHref="#sg"
-                    id="pg"
-                    patternTransform="matrix(-2,0,0,15,-2,-5)"
-                    />
-                    <pattern
-                    patternUnits="userSpaceOnUse"
-                    width="2"
-                    height="1"
-                    patternTransform="translate(0,0) scale(10,10)"
-                    id="sg">
-                    <rect
-                        // @ts-ignore
-                        style={`fill:${colorMap.g};stroke:none`}
-                        x="0"
-                        y="-0.5"
-                        width="1"
-                        height="2"
-                        />
-                    </pattern>
-
-                    <pattern
-                    xlinkHref="#sp"
-                    id="pp"
-                    patternTransform="matrix(-2,0,0,15,-2,-5)"
-                    />
-                    <pattern
-                    patternUnits="userSpaceOnUse"
-                    width="2"
-                    height="1"
-                    patternTransform="translate(0,0) scale(10,10)"
-                    id="sp">
-                    <rect
-                        // @ts-ignore
-                        style={`fill:${colorMap.p};stroke:none`}
-                        x="0"
-                        y="-0.5"
-                        width="1"
-                        height="2"
-                        />
-                    </pattern>
-                </defs>
-                </svg>
+        <div className="scontainer game-container"
+        >
             {
                 this.state.won ?
-                    <div>
-                        <h1 className="text-center">You did it! Congrats!</h1>
-                        {/* timeFin has to be a date here */}
-                        <h1 className="text-center">Time: {this.parseDiff(this.state.timeStarted, this.state.timeFin as Date)}</h1>
-                        <h1 className="text-center">Hints used: {this.state.hints}</h1>
-                        <h1 className="text-center">Wrong guesses: {this.state.wrongs}</h1>
+                    <div className="infoCol">
+                        <h1>You did it! Congrats!</h1>
+                        <h1>Time: {this.parseDiff(this.state.timeStarted, this.state.timeFin as Date)}</h1>
+                        <h1>Hints used: {this.state.hints}</h1>
+                        <h1>Wrong guesses: {this.state.wrongs}</h1>
 
-                        <div className="row" style={{marginTop: 350}}>
-                            <button className="col btn btn-primary" onClick={(e) => {
+                        <div style={{marginTop: 350}}>
+                            <button className="btn btn-primary" onClick={(e) => {
                             e.preventDefault()
                             e.button == 0 ? this.setState( this.initer() ) : {}
                             }}>Play again</button>
-                            <div className="col-2" />
-                            <button className="col btn btn-primary" onClick={(e) => {
+                            <button className="btn btn-primary" onClick={(e) => {
                             e.preventDefault()
                             e.button == 0 ? this.setState( this.initer() ) : {}
                             }}>You have no choice</button>
                         </div>
                     </div>
-                : <div className="row">
-                    <div className="col-3half" style={{marginRight: '3%'}}>
-                    <h1 style={{color:"white", textAlign:"center", verticalAlign:"middle"}} className="text-center" height="100vh">
+                : <div className="boardGameWrapper">
+                    <div className="extra-col">
+                    <h1 style={{color:"white", textAlign:"center", verticalAlign:"middle"}}>
                         Set!
                     </h1>
-                    <p className="text-center text-awhite">Found sets: {this.state.setsFound.length}</p>
-                    <p className="text-center text-awhite">Wrong Guesses: {this.state.wrongs}</p>
-                    <p className="text-center text-awhite">Deck: {this.state.deck.length}</p>
-                    <p className={`text-center ${this.state.hints ? 'text-danger' : 'text-awhite'}`}>Hints used: {this.state.hints}</p>
-                    <p className="text-center text-awhite">Time Used: {this.parseDiff(this.state.timeStarted, new Date, false)}</p>
+                    <p className="text-awhite">Found sets: {this.state.setsFound.length}</p>
+                    <p className="text-awhite">Wrong Guesses: {this.state.wrongs}</p>
+                    <p className="text-awhite">Deck: {this.state.deck.length}</p>
+                    <p className={`${this.state.hints ? 'text-danger' : 'text-awhite'}`}>Hints used: {this.state.hints}</p>
+                    <p className="text-awhite">Time Used: {this.parseDiff(this.state.timeStarted, new Date, false)}</p>
                     <br />
-                    <button className="btn btn-lg w-100 btn-primary" style={{marginBottom: 20}} onClick={(e) => {
+                    <button className="btn btn-p" style={{width: '100%', marginBottom: 20}} onClick={(e) => {
                         if (e.button == 0) {
                             this.hint()
                         }
                     }} title="Hint (for weaklings)">Hint</button>
                     <br />
-                    <button className="btn btn-lg w-100 btn-danger" style={{marginBottom: 20}} onClick={(e) => {
+                    <button className="btn btn-d" style={{marginBottom: 20, width: "100%"}} onClick={(e) => {
                         if (e.button == 0) {
                             this.setState(this.initer())
                         }
@@ -415,20 +350,21 @@ export class Game extends Component<{}, State> {
 
                     <p className="warning">{this.state.hintErr}</p>
                     </div>
-                    <div className="col gameBoard">
-                        <table>
+                    <div className="gameBoard">
+                        {/* <table height="100vh" className="gameBoard" style={{borderSpacing: "4px"}}> */}
                     {
                     board.map((row) => {
                         return (
-                        <tr>
+                        <div className="srow" style={{order: board.indexOf(row)}}>
                             {row.map((card) => {if (!card) return
                                 return (
-                                <td>
+                                    <div style={{paddingLeft: "4px"}} className="card-wrapper">
                                     <div className="game-card" id={card} style={{background: this.state.selectedCards.includes(card) ? 'yellow' : 'wheat'}} onClick={(e) => {if (e.button == 0) this.handleSetSelector(card)}}>
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             xmlnsXlink="http://www.w3.org/1999/xlink"
                                             viewBox="0 0 210 360">
+                                                <SvgDefs></SvgDefs>
                                         {
                                             arrayThing(card[0]).map((val) => {
                                                 return (
@@ -445,13 +381,16 @@ export class Game extends Component<{}, State> {
                                         }
                                         </svg>
                                     </div>
-                                </td>
+                                    </div>
+                                // </td>
                                 )
                             })}
-                        </tr>
+                            </div>
+                        // </tr>
                         )
                     })}
-                    </table>
+                    {/* </div> */}
+                    {/* </table> */}
                     </div>
                 </div>
             }

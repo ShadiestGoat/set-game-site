@@ -1,25 +1,189 @@
+/*
+    Thanks to grayshift (https://grayshift.io) for allowing me to steal some of their stuff lmao
+*/
+
 :root {
-  background-color: #202124 !important;
+   --ico: rgb(225, 222, 222);
+   background-color: #202124 !important;
 }
-
-.game-card {
-  border-radius: 6px;
-  width: 11vw;
-  height: 31vh;
-  min-width: 100px;
-  min-height: 150px;
-  justify-content: center;
-  overflow-y: hidden;
-}
-
 
 .game-card > svg {
-  display: block;
-  margin: auto;
-  margin-top: 10%;
-  width: 80%;
+    display: block;
+    /* margin: auto; */
+    margin: 4% 0 0 10.5% !important;
+    width: 80%;
+    max-height: 98%;
+}
+
+.game-container {
+    display: grid;
+    /* display: inline-flex; */
+    margin-top: 1% !important;
+}
+
+/* .gameBoard > tr > td {
+} */
+
+.rootWrapperAmIRightFellas > svg {
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.boardGameWrapper {
+    display: inline-flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-content: stretch;
+}
+
+.srow {
+    margin-top: 4px;
+    display: inline-flex;
+    flex-direction: row;
+}
+
+.extra-col {
+    flex: 1 0 0%;
+    /* flex-basis: 100px; */
+    /* width: 28%; */
+    margin-right: 3%;
 }
 
 .gameBoard {
-  min-width: 20vw;
+    flex-grow: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: stretch  ;
+    min-width: 500px;
+    min-height: 580px;
+    /* max-height: 95vh; */
+    /* height: 700px; */
+    /* margin-left: 4px; */
+    /* padding-left: 4px; */
+}
+
+.card-wrapper {
+    min-height: 123px;
+    /* min-width: 98px; */
+}
+
+.game-card {
+    border-radius: 6px;
+    width: 11vw;
+    height: 31vh;
+    /* height: 100%; */
+    min-width: 100px;
+    min-height: 125px;
+    justify-content: center;
+    overflow-y: hidden;
+    padding-top: 4px;
+}
+
+.scontainer {
+    width: 100%;
+    padding-right: 1rem;
+    padding-left: 1rem;
+}
+
+.infoCol {
+    align-self: stretch;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.75rem var(--spacer-4);
+    text-align: center;
+    vertical-align: middle;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    background-color: transparent;
+    border: 0;
+    border-radius: 12.25px;
+    transition-timing-function: ease;
+    transition-duration: 0.4s;
+    transition-property: color, background-color;
+    color: var(--ico);
+    padding: 1rem 2rem;
+    font-weight: 500 !important;
+}
+
+.btn:focus {
+    outline: 0;
+}
+
+/* OwO Thefty wefty */
+
+@media (prefers-reduced-motion: reduce) {
+    .btn {
+      transition: none;
+    }
+}
+
+
+.btn-d {
+    background-color: #d42738;
+}
+
+.btn-d:focus,
+.btn-d.active,
+.btn-d.show,
+.btn-d:active,
+.btn-d:hover {
+    background-color: #ae1c2b;
+}
+
+.btn-p {
+    background-color: #6f42c2;
+}
+
+.btn-p:focus,
+.btn-p.active,
+.btn-p.show,
+.btn-p:active,
+.btn-p:hover {
+    background-color: #5729ac;
+}
+
+::selection {
+    background: #6d10ff;
+}
+::-moz-selection {
+    background: #6d10ff;
+}
+
+*,
+:after,
+:before {
+    box-sizing: border-box;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+    color: var(--ico) !important;
+    margin: 2% 0 0 0;
+    margin-bottom: 0;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.4;
+}
+
+body {
+    margin: 0;
+    font: 500 1rem/1.5 Inter, sans-serif;
+    -webkit-text-size-adjust: 100%;
+}
+h1 {
+    font-size: 2.7rem;
+}
+
+button {
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    color: inherit;
 }
