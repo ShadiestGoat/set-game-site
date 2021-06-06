@@ -304,7 +304,7 @@ export class Game extends Component<{}, State> {
 
         return (
         <div className="scontainer game-container"
-        >
+        ><SvgDefs />
             {
                 this.state.won ?
                     <div className="infoCol">
@@ -364,7 +364,6 @@ export class Game extends Component<{}, State> {
                                             xmlns="http://www.w3.org/2000/svg"
                                             xmlnsXlink="http://www.w3.org/1999/xlink"
                                             viewBox="0 0 210 360">
-                                                <SvgDefs></SvgDefs>
                                         {
                                             arrayThing(card[0]).map((val) => {
                                                 return (
