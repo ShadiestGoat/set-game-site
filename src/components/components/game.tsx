@@ -263,8 +263,8 @@ export class Game extends Component<{}, State> {
                         }
                     } else {
                         board.splice(info.card1, 1)
-                        board.splice(info.card2 - 1, 1)
-                        board.splice(info.card3 - 2, 1)
+                        board.splice(board.indexOf(oldSel[0]), 1)
+                        board.splice(board.indexOf(oldSel[1]), 1)
                         newCols--
                     }
                     if (newDeck.length == 0 && !this.findSet(board)) {
