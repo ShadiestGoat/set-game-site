@@ -19,6 +19,7 @@ type State = {
     wrongs: number,
     timeFin: Date | false,
     burner: number
+    boardCache: JSX.Element
 }
 
 export class Game extends Component<{}, State> {
@@ -74,7 +75,8 @@ export class Game extends Component<{}, State> {
             hints: 0,
             wrongs: 0,
             timeFin: false,
-            burner: 0
+            burner: 0,
+            boardCache: this.genBoard(rawBoards, cols, [])
         }
     }
 
@@ -199,15 +201,12 @@ export class Game extends Component<{}, State> {
         for (let i = 0; i < this.state.cols * 3; i++) {
             newSel.push(false)
         }
-
-        if (!adr) {
-            this.setState({hintErr: 'No sets!'})
-        } else {
-            newSel[adr[0]] = true
-            newSel[adr[1]] = true
-            sel = [this.state.board[adr[0]], this.state.board[adr[1]]]
-        }
+        if (!adr) {this.setState({hintErr: "No sets????"}); return}
+        newSel[adr[0]] = true
+        newSel[adr[1]] = true
+        sel = [this.state.board[adr[0]], this.state.board[adr[1]]]
         this.setState({selected: newSel, selectedCards: sel, hints: this.state.hints + 1})
+        this.setState({boardCache: this.genBoard()})
     }
 
     win() {
@@ -279,15 +278,16 @@ export class Game extends Component<{}, State> {
                     this.setState({wrongs: this.state.wrongs + 1})
                 }
             }
-            this.setState({selected: newSel, selectedCards: selected, setsFound:found, deck:newDeck, board: board, cols: newCols})
+        this.setState({selected: newSel, selectedCards: selected, setsFound:found, deck:newDeck, board: board, cols: newCols})
+        this.setState({boardCache: this.genBoard()})
     }
 
-    boardParser():setCard[][] {
+    boardParser(raw:setCard[] = this.state.board, cols = this.state.cols):setCard[][] {
         let LastRow = 0
         let board:setCard[][] = []
         let row:setCard[] = []
-        this.state.board.forEach((card, index) => {
-            let rowI = Math.floor(index / this.state.cols)
+        raw.forEach((card, index) => {
+            let rowI = Math.floor(index / cols)
             if (rowI != LastRow) {
                 board.push(row)
                 row = []
@@ -299,9 +299,47 @@ export class Game extends Component<{}, State> {
         return board
     }
 
-    render() {
-        const board = this.boardParser()
+    genBoard(raw:setCard[] = this.state.board, cols: number = this.state.cols, selectedCards = this.state.selectedCards) {
+        const board = this.boardParser(raw, cols)
+        return <div className="gameBoard">
+            {board.map((row) => {
+                return (
+                <div className="srow" style={{order: board.indexOf(row)}}>
+                    {row.map((card) => {if (!card) return
+                        return (
+                            <div style={{paddingLeft: "4px"}} className="card-wrapper">
+                            <div className="game-card" id={card} style={{background: (selectedCards).includes(card) ? 'yellow' : 'wheat'}} onClick={(e) => {if (e.button == 0) this.handleSetSelector(card)}}>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    xmlnsXlink="http://www.w3.org/1999/xlink"
+                                    viewBox="0 0 210 360">
+                                {
+                                    arrayThing(card[0]).map((val) => {
+                                        console.log(`${card} ${val} ${card[1]}`)
+                                        switch(card[1]) {
+                                            case 'o':
+                                                return <Oval stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:4;`} transform={transformations[card[0] + card[1] + val]} />
+                                            case 'r':
+                                                return <Rhombus transform={transformations[card[0] + card[1] + val]} stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:2;`} />
+                                            case 'w':
+                                                return <Squigly stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:2;`} transform={transformations[card[0] + card[1] + val]} />
+                                            default:
+                                                console.error('how the flipidy what?')
+                                        }
+                                    })
+                                }
+                                </svg>
+                            </div>
+                            </div>
+                        )
+                    })}
+                    </div>
+                )
+            })}
+        </div>
+    }
 
+    render() {
         return (
         <div className="scontainer game-container"
         ><SvgDefs />
@@ -350,42 +388,7 @@ export class Game extends Component<{}, State> {
 
                     <p className="warning">{this.state.hintErr}</p>
                     </div>
-                    <div className="gameBoard">
-                    {
-                    board.map((row) => {
-                        return (
-                        <div className="srow" style={{order: board.indexOf(row)}}>
-                            {row.map((card) => {if (!card) return
-                                return (
-                                    <div style={{paddingLeft: "4px"}} className="card-wrapper">
-                                    <div className="game-card" id={card} style={{background: this.state.selectedCards.includes(card) ? 'yellow' : 'wheat'}} onClick={(e) => {if (e.button == 0) this.handleSetSelector(card)}}>
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            xmlnsXlink="http://www.w3.org/1999/xlink"
-                                            viewBox="0 0 210 360">
-                                        {
-                                            arrayThing(card[0]).map((val) => {
-                                                switch(card[1]) {
-                                                    case 'o':
-                                                        return <Oval stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:4;`} transform={transformations[card[0] + card[1] + val]} />
-                                                    case 'r':
-                                                        return <Rhombus transform={transformations[card[0] + card[1] + val]} stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:2;`} />
-                                                    case 'w':
-                                                        return <Squigly stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:2;`} transform={transformations[card[0] + card[1] + val]} />
-                                                    default:
-                                                        console.error('how the flipidy what?')
-                                                }
-                                            })
-                                        }
-                                        </svg>
-                                    </div>
-                                    </div>
-                                )
-                            })}
-                            </div>
-                        )
-                    })}
-                    </div>
+                    {this.state.boardCache}
                 </div>
             }
             </div>
