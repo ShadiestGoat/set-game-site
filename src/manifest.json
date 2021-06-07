@@ -3,7 +3,7 @@
   "short_name": "Set game",
   "start_url": "/",
   "display": "standalone",
-  "orientation": "landscape",
+  "orientation": "vertical",
   "theme_color": "#6d10ff",
   "icons": [
     {

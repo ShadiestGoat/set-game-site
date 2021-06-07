@@ -38,12 +38,6 @@
     align-content: stretch;
 }
 
-.srow {
-    margin-top: 4px;
-    display: inline-flex;
-    flex-direction: row;
-}
-
 .extra-col {
     flex: 1 0 0%;
     /* flex-basis: 100px; */
@@ -59,15 +53,12 @@
     align-content: stretch  ;
     min-width: 500px;
     min-height: 580px;
-    /* max-height: 95vh; */
-    /* height: 700px; */
-    /* margin-left: 4px; */
-    /* padding-left: 4px; */
 }
 
-.card-wrapper {
-    min-height: 123px;
-    /* min-width: 98px; */
+.gameBoard > div {
+    margin-top: 4px;
+    display: inline-flex;
+    flex-direction: row;
 }
 
 .game-card {
@@ -80,6 +71,7 @@
     justify-content: center;
     overflow-y: hidden;
     padding-top: 4px;
+    background: var(--ico);
 }
 
 .scontainer {
@@ -90,6 +82,8 @@
 
 .infoCol {
     align-self: stretch;
+    display: flex;
+    flex-direction: column;
 }
 
 .btn {
@@ -109,6 +103,7 @@
     color: var(--ico);
     padding: 1rem 2rem;
     font-weight: 500 !important;
+    cursor:pointer;
 }
 
 .btn:focus {
@@ -128,11 +123,11 @@
     background-color: #d42738;
 }
 
-.btn-d:focus,
 .btn-d.active,
 .btn-d.show,
 .btn-d:active,
-.btn-d:hover {
+.btn-d:hover
+{
     background-color: #ae1c2b;
 }
 
@@ -140,7 +135,6 @@
     background-color: #6f42c2;
 }
 
-.btn-p:focus,
 .btn-p.active,
 .btn-p.show,
 .btn-p:active,
@@ -186,4 +180,45 @@ button {
     font-weight: inherit;
     line-height: inherit;
     color: inherit;
+}
+
+.yahhoo {
+    justify-content: space-around;
+    /* justify-content: space-evenly; */
+    display: flex;
+}
+
+.infoCol > h1 {
+    margin-top: 0.25%;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.AccepterBby {
+    display: flex;
+    flex-direction: column;
+}
+
+.AccepterBby > button {
+    width: 12.5%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    margin-top: 115px;
+}
+
+.helperbtn-w {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 35%;
+}
+
+.help-btn {
+    padding: 0;
+    width: 10vh;
+    height: 10vh;
+    border-radius: 50%;
 }

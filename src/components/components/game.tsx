@@ -1,7 +1,6 @@
-import {Component, h} from "preact"
+import {Component, h, Fragment} from "preact"
 import { rand } from "../../tools"
-import { arrayThing, boardRow, colorMap, FullDeck, keyMap, setBoard, setCard, transformations } from "./gameHelper"
-import { SetCard } from "./parts/gameCard"
+import { arrayThing, boardRow, colorMap, FullDeck, keyMap, setCard, transformations } from "./gameHelper"
 import { Oval, Rhombus, Squigly } from "./parts/partz/cards"
 import { SvgDefs } from "./svgDefs"
 
@@ -14,12 +13,13 @@ type State = {
     selectedCards: setCard[],
     hintErr: string,
     timeStarted:Date,
-    won: boolean,
     hints: number,
     wrongs: number,
     timeFin: Date | false,
     burner: number
     boardCache: JSX.Element
+    won: boolean
+    started: boolean
 }
 
 export class Game extends Component<{}, State> {
@@ -30,7 +30,45 @@ export class Game extends Component<{}, State> {
         this.findSet = this.findSet.bind(this)
         this.correctSet = this.correctSet.bind(this)
         this.hint = this.hint.bind(this)
-        this.state = this.initer()
+        this.state = {
+            started: true,
+            board: [],
+            boardCache: this.genBoard(['1oge', '1oge', '1oge', '1oge',
+                                        '1oge', '1oge', '1oge', '1oge',
+                                    '1oge', '1oge', '1oge', '1oge'], 4, []),
+            burner: 0,
+            cols: 0,
+            deck: [
+            '1oge', '1oge', '1oge', '1oge',
+            '1oge', '1oge', '1oge', '1oge',
+            '1oge', '1oge', '1oge', '1oge',
+            '1oge', '1oge', '1oge', '1oge',
+            '1oge', '1oge', '1oge', '1oge',
+            '1oge', '1oge', '1oge', '1oge',
+            '1oge', '1oge', '1oge', '1oge',
+            '1oge', '1oge', '1oge', '1oge',
+            '1oge', '1oge', '1oge', '1oge',
+            '1oge', '1oge', '1oge', '1oge',
+            '1oge', '1oge', '1oge', '1oge',
+            '1oge', '1oge', '1oge', '1oge',
+            '1oge', '1oge', '1oge', '1oge',
+            '1oge', '1oge', '1oge', '1oge',
+            '1oge', '1oge', '1oge', '1oge',
+            '1oge', '1oge', '1oge', '1oge',
+            '1oge', '1oge', '1oge', '1oge', '1oge'
+        ],
+            hintErr: '',
+            hints: 0,
+            selected: [],
+            selectedCards: [],
+            setsFound: [],
+            timeFin: false,
+            timeStarted: new Date(),
+            won: false,
+            wrongs: 0
+        }
+        this.setState(this.initer())
+        // this.state = this.initer()
     }
 
     initer():State {
@@ -41,7 +79,7 @@ export class Game extends Component<{}, State> {
         let rawBoards:setCard[] = []
         let selected:boolean[]  = []
         let cols = 4
-        for (let i = 0; i < cols*3; i++) {
+        for (let i = 0; i < 12; i++) {
             const index = rand(0, curDeck.length - 1)
             rawBoards.push(curDeck[index])
             curDeck.splice(index, 1)
@@ -61,6 +99,7 @@ export class Game extends Component<{}, State> {
                 cols = _NewBoardData.cols
             }
         }
+        console.log('god fucking dammit')
 
         return {
             deck: curDeck,
@@ -76,6 +115,7 @@ export class Game extends Component<{}, State> {
             wrongs: 0,
             timeFin: false,
             burner: 0,
+            started: true,
             boardCache: this.genBoard(rawBoards, cols, [])
         }
     }
@@ -133,7 +173,10 @@ export class Game extends Component<{}, State> {
     }
 
     componentDidMount() {
-        setInterval(() => this.setState({burner: this.state.burner + 1}), 1000)
+        setInterval(() => {
+            if (this.state.won || !this.state.started) return
+            this.setState({burner: this.state.burner + 1})
+        }, 1000)
         document.addEventListener('keydown', (e) => {
             if (e.key == 'r' && !e.ctrlKey) {
                 this.setState(this.initer())
@@ -205,8 +248,7 @@ export class Game extends Component<{}, State> {
         newSel[adr[0]] = true
         newSel[adr[1]] = true
         sel = [this.state.board[adr[0]], this.state.board[adr[1]]]
-        this.setState({selected: newSel, selectedCards: sel, hints: this.state.hints + 1})
-        this.setState({boardCache: this.genBoard()})
+        this.setState({selected: newSel, selectedCards: sel, hints: this.state.hints + 1, boardCache: this.genBoard(this.state.board, this.state.cols, sel)})
     }
 
     win() {
@@ -217,69 +259,68 @@ export class Game extends Component<{}, State> {
     }
 
     handleSetSelector(card:setCard) {
-            let newSel = this.state.selected
-            const index = this.state.board.indexOf(card)
-            newSel[index] = !newSel[index]
-            let found = this.state.setsFound
-            let selected = this.state.selectedCards
-            let newDeck = this.state.deck
-            let newCols = this.state.cols
+        let newSel = this.state.selected
+        const index = this.state.board.indexOf(card)
+        newSel[index] = !newSel[index]
+        let found = this.state.setsFound
+        let selected = this.state.selectedCards
+        let newDeck = this.state.deck
+        let newCols = this.state.cols
 
-            if (newSel[index]) {
-                selected.push(card)
-            } else {
-                selected.splice(selected.indexOf(card), 1)
-            }
+        if (newSel[index]) {
+            selected.push(card)
+        } else {
+            selected.splice(selected.indexOf(card), 1)
+        }
 
-            let board = this.state.board
-            if (selected.length == 3) {
-                const oldSel = selected
-                selected = []
-                let selll:boolean[] = []
-                for (let item of newSel) selll.push(false)
-                newSel = selll
-                if (this.correctSet(this.state.selectedCards[0], this.state.selectedCards[1], card)) {
-                    found.push([this.state.selectedCards[0], this.state.selectedCards[1], card])
-                    let info:{
-                        [key:string]: number
-                    } = {
-                        card1: board.indexOf(card),
+        let board = this.state.board
+        if (selected.length == 3) {
+            const oldSel = selected
+            selected = []
+            let selll:boolean[] = []
+            for (let item of newSel) selll.push(false)
+            newSel = selll
+            if (this.correctSet(this.state.selectedCards[0], this.state.selectedCards[1], card)) {
+                found.push([this.state.selectedCards[0], this.state.selectedCards[1], card])
+                let info:{
+                    [key:string]: number
+                } = {
+                    card1: board.indexOf(card),
+                }
+                let typeatm = 'card2'
+                for (let cardd of board) {
+                    if (cardd == card) continue
+                    if (oldSel.includes(cardd)) {
+                        info[typeatm] = board.indexOf(cardd)
+                        typeatm =  'card3'
                     }
-                    let typeatm = 'card2'
-                    for (let cardd of board) {
-                        if (cardd == card) continue
-                        if (oldSel.includes(cardd)) {
-                            info[typeatm] = board.indexOf(cardd)
-                            typeatm =  'card3'
-                        }
-                    }
-                    if (board.length == 12) {
-                        for (let i of [1, 2, 3]) {
-                            const curCard = 'card' + i.toString()
-                            const newCard = rand(0, newDeck.length - 1)
-                            board[info[curCard]] = newDeck[newCard]
-                            newDeck.splice(newCard, 1)
-                        }
-                    } else {
-                        board.splice(info.card1, 1)
-                        board.splice(board.indexOf(oldSel[0]), 1)
-                        board.splice(board.indexOf(oldSel[1]), 1)
-                        newCols--
-                    }
-                    if (newDeck.length == 0 && !this.findSet(board)) {
-                        this.win()
-                    } else if (!this.findSet(board)) {
-                        const add =this.addRow(false, board, newDeck, newCols)
-                        board = add.board
-                        newDeck = add.deck
-                        newCols = add.cols
+                }
+                if (board.length == 12) {
+                    for (let i of [1, 2, 3]) {
+                        const curCard = 'card' + i.toString()
+                        const newCard = rand(0, newDeck.length - 1)
+                        board[info[curCard]] = newDeck[newCard]
+                        newDeck.splice(newCard, 1)
                     }
                 } else {
-                    this.setState({wrongs: this.state.wrongs + 1})
+                    board.splice(info.card1, 1)
+                    board.splice(board.indexOf(oldSel[0]), 1)
+                    board.splice(board.indexOf(oldSel[1]), 1)
+                    newCols--
                 }
+                if (newDeck.length == 0 && !this.findSet(board)) {
+                    this.win()
+                } else if (!this.findSet(board)) {
+                    const add =this.addRow(false, board, newDeck, newCols)
+                    board = add.board
+                    newDeck = add.deck
+                    newCols = add.cols
+                }
+            } else {
+                this.setState({wrongs: this.state.wrongs + 1})
             }
-        this.setState({selected: newSel, selectedCards: selected, setsFound:found, deck:newDeck, board: board, cols: newCols})
-        this.setState({boardCache: this.genBoard()})
+        }
+        this.setState({selected: newSel, selectedCards: selected, setsFound:found, deck:newDeck, board: board, cols: newCols, boardCache: this.genBoard(board, newCols, selected)})
     }
 
     boardParser(raw:setCard[] = this.state.board, cols = this.state.cols):setCard[][] {
@@ -301,32 +342,24 @@ export class Game extends Component<{}, State> {
 
     genBoard(raw:setCard[] = this.state.board, cols: number = this.state.cols, selectedCards = this.state.selectedCards) {
         const board = this.boardParser(raw, cols)
-        return <div className="gameBoard">
-            {board.map((row) => {
+        return <Fragment> {board.map((row) => {
                 return (
-                <div className="srow" style={{order: board.indexOf(row)}}>
+                <div style={{order: board.indexOf(row)}}>
                     {row.map((card) => {if (!card) return
                         return (
                             <div style={{paddingLeft: "4px"}} className="card-wrapper">
-                            <div className="game-card" id={card} style={{background: (selectedCards).includes(card) ? 'yellow' : 'wheat'}} onClick={(e) => {if (e.button == 0) this.handleSetSelector(card)}}>
+                            <div className={`game-card ${(selectedCards).includes(card) ? 'card-selected' : ''}`} id={card} onClick={(e) => {if (e.button == 0) this.handleSetSelector(card)}}>
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     xmlnsXlink="http://www.w3.org/1999/xlink"
                                     viewBox="0 0 210 360">
                                 {
-                                    arrayThing(card[0]).map((val) => {
-                                        console.log(`${card} ${val} ${card[1]}`)
-                                        switch(card[1]) {
-                                            case 'o':
-                                                return <Oval stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:4;`} transform={transformations[card[0] + card[1] + val]} />
-                                            case 'r':
-                                                return <Rhombus transform={transformations[card[0] + card[1] + val]} stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:2;`} />
-                                            case 'w':
-                                                return <Squigly stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:2;`} transform={transformations[card[0] + card[1] + val]} />
-                                            default:
-                                                console.error('how the flipidy what?')
-                                        }
-                                    })
+                                    card[1] == 'o' ?
+                                    <Oval card={card} />
+                                    : card[1] == 'r' ?
+                                    <Rhombus card={card} />
+                                    :
+                                    <Squigly card={card} />
                                 }
                                 </svg>
                             </div>
@@ -335,8 +368,8 @@ export class Game extends Component<{}, State> {
                     })}
                     </div>
                 )
-            })}
-        </div>
+            })
+        } </Fragment>
     }
 
     render() {
@@ -344,6 +377,7 @@ export class Game extends Component<{}, State> {
         <div className="scontainer game-container"
         ><SvgDefs />
             {
+                this.state.started ?
                 this.state.won ?
                     <div className="infoCol">
                         <h1>You did it! Congrats!</h1>
@@ -351,15 +385,23 @@ export class Game extends Component<{}, State> {
                         <h1>Hints used: {this.state.hints}</h1>
                         <h1>Wrong guesses: {this.state.wrongs}</h1>
 
-                        <div style={{marginTop: 350}}>
-                            <button className="btn btn-primary" onClick={(e) => {
+                        <div className="yahhoo" style={{marginTop: 200}}>
+                            <button className="btn btn-p" onClick={(e) => {
                             e.preventDefault()
                             e.button == 0 ? this.setState( this.initer() ) : {}
                             }}>Play again</button>
-                            <button className="btn btn-primary" onClick={(e) => {
+                            <button className="btn btn-p" onClick={(e) => {
                             e.preventDefault()
                             e.button == 0 ? this.setState( this.initer() ) : {}
                             }}>You have no choice</button>
+                            <button className="btn btn-p" onClick={(e) => {
+                            e.preventDefault()
+                            e.button == 0 ? this.setState( this.initer() ) : {}
+                            }}>No, but like you really have 0 choice here</button>
+                            <button className="btn btn-p" onClick={(e) => {
+                            e.preventDefault()
+                            e.button == 0 ? this.setState( this.initer() ) : {}
+                            }}>You will play again, I know it</button>
                         </div>
                     </div>
                 : <div className="boardGameWrapper">
@@ -384,11 +426,28 @@ export class Game extends Component<{}, State> {
                             this.setState(this.initer())
                         }
                     }} title="Restart the game (r)" >Restart</button>
-
-
                     <p className="warning">{this.state.hintErr}</p>
+                    <div className="helperbtn-w" title="Help!" onClick={(e) => {
+                        if (e.button != 0) return
+                        this.setState({started: false})
+                    }}>
+                        <button className="btn help-btn btn-d">?</button>
                     </div>
+                    </div>
+                    <div className="gameBoard">
                     {this.state.boardCache}
+                    </div>
+                </div>
+                : <div className="AccepterBby">
+                    <h1>Hello and welcome to Set!</h1>
+                    <h3>The rules are simple; You have to find all the sets, as fast as possible! <br />
+                    A "set" is a group of 3 cards, which all follow a specific pattern. <br />
+                    Each card has 4 properties: shape, color, number and fill type.<br />
+                    The rule for a pattern is that if 2 cards share a property, <br />the other one must have that property too.</h3>
+                    <button autofocus={true} className="btn btn-d center" onClick={(e) => {
+                        if (e.button != 0) return
+                        this.setState(this.initer())
+                    }}>Yessir!</button>
                 </div>
             }
             </div>
