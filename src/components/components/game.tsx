@@ -1,6 +1,6 @@
 import {Component, h, Fragment} from "preact"
 import { rand } from "../../tools"
-import { arrayThing, boardRow, colorMap, FullDeck, keyMap, setCard, transformations } from "./gameHelper"
+import { FullDeck, keyMap, setCard } from "./gameHelper"
 import { Oval, Rhombus, Squigly } from "./parts/partz/cards"
 import { SvgDefs } from "./svgDefs"
 

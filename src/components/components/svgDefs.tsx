@@ -1,21 +1,25 @@
 import { Component, h } from "preact";
 import { colorMap } from "./gameHelper";
 
-export class SvgDefs extends Component {
+const width = '2'
+const height = '1'
+const transform = 'matrix(-4,0,0,10,-4,-10)'
+const trans1 = 'translate(0,0) scale(10,10)'
 
+export class SvgDefs extends Component {
     render() {
         return <svg width="0" height='0'>
         <defs>
             <pattern
             xlinkHref="#sr"
             id="pr"
-            patternTransform="matrix(-2,0,0,15,-2,-5)"
+            patternTransform={transform}
             />
             <pattern
             patternUnits="userSpaceOnUse"
-            width="2"
-            height="1"
-            patternTransform="translate(0,0) scale(10,10)"
+            width={width}
+            height={height}
+            patternTransform={trans1}
             id="sr">
             <rect
                 style={`fill:${colorMap.r};stroke:none`}
@@ -29,13 +33,13 @@ export class SvgDefs extends Component {
             <pattern
             xlinkHref="#sg"
             id="pg"
-            patternTransform="matrix(-2,0,0,15,-2,-5)"
+            patternTransform={transform}
             />
             <pattern
             patternUnits="userSpaceOnUse"
-            width="2"
-            height="1"
-            patternTransform="translate(0,0) scale(10,10)"
+            width={width}
+            height={height}
+            patternTransform={trans1}
             id="sg">
             <rect
                 // @ts-ignore
@@ -50,13 +54,13 @@ export class SvgDefs extends Component {
             <pattern
             xlinkHref="#sp"
             id="pp"
-            patternTransform="matrix(-2,0,0,15,-2,-5)"
+            patternTransform={transform}
             />
             <pattern
             patternUnits="userSpaceOnUse"
-            width="2"
-            height="1"
-            patternTransform="translate(0,0) scale(10,10)"
+            width={width}
+            height={height}
+            patternTransform={trans1}
             id="sp">
             <rect
                 // @ts-ignore
