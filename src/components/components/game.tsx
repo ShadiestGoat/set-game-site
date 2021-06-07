@@ -133,7 +133,7 @@ export class Game extends Component<{}, State> {
     componentDidMount() {
         setInterval(() => this.setState({burner: this.state.burner + 1}), 1000)
         document.addEventListener('keydown', (e) => {
-            if (e.key == 'r') {
+            if (e.key == 'r' && !e.ctrlKey) {
                 this.setState(this.initer())
             } else if (Object.keys(keyMap).includes(e.key)) {
                 const board = this.boardParser()
