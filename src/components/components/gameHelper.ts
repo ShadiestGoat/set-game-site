@@ -11,7 +11,7 @@ export const cardType = [
     ['r', 'p', 'g'],
     ['f', 'e', 's']
 ]
-export const colorMap = {
+export const colorMap:{[key:string]:string} = {
     'r': '#bd0000',
     'p': '#761068',
     'g': '#00aa00'
@@ -42,7 +42,7 @@ export const FullDeck:setCard[] = [
     "3ogf", "3oge", "3ogs"
 ]
 
-export const transformations = {
+export const transformations:{[key:string]:string} = {
     '1w1':'translate(-115,-243) scale(2.1)',
     '2w1':'translate(-115,-295) scale(2.1)',
     '2w2':'translate(-115,-195) scale(2.1)',

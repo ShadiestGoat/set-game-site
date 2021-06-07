@@ -368,12 +368,10 @@ export class Game extends Component<{}, State> {
                                             arrayThing(card[0]).map((val) => {
                                                 return (
                                                 card[1] == "o" ?
-                                                // @ts-ignore
                                                 <Oval stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:4;`} transform={transformations[card[0] + card[1] + val]} />
                                                 : card[1] == "r" ?
-                                                // @ts-ignore
-                                                <Rhombus transform={transformations[card[0] + card[1] + val]} stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:2;`} /> :
-                                                // @ts-ignore
+                                                <Rhombus transform={transformations[card[0] + card[1] + val]} stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:2;`} />
+                                                :
                                                 <Squigly stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:2;`} transform={transformations[card[0] + card[1] + val]} />
                                                 )
                                             })
