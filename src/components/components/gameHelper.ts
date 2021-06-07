@@ -63,12 +63,14 @@ export const transformations:{[key:string]:string} = {
     '3o3':'translate(15,194)',
 }
 export function arrayThing(num:string) {
-    let numArr = []
-    for (let i of ['1', '2', '3', '4', '5']) {
-        if (i == num) {numArr.push(i); return numArr}
-        numArr.push(i)
+    const defs:{[key:string]:string[]} = {
+        '1': ['1'],
+        '2': ['1', '2'],
+        '3': ['1', '2', '3'],
+        '4': ['1', '2', '3', '4'],
+        '5': ['1', '2', '3', '4', '5']
     }
-    return numArr
+    return defs[num]
 }
 
 export const keyMap: {[key: string]: [number, number]} = {

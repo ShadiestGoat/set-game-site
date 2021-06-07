@@ -351,7 +351,6 @@ export class Game extends Component<{}, State> {
                     <p className="warning">{this.state.hintErr}</p>
                     </div>
                     <div className="gameBoard">
-                        {/* <table height="100vh" className="gameBoard" style={{borderSpacing: "4px"}}> */}
                     {
                     board.map((row) => {
                         return (
@@ -366,28 +365,26 @@ export class Game extends Component<{}, State> {
                                             viewBox="0 0 210 360">
                                         {
                                             arrayThing(card[0]).map((val) => {
-                                                return (
-                                                card[1] == "o" ?
-                                                <Oval stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:4;`} transform={transformations[card[0] + card[1] + val]} />
-                                                : card[1] == "r" ?
-                                                <Rhombus transform={transformations[card[0] + card[1] + val]} stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:2;`} />
-                                                :
-                                                <Squigly stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:2;`} transform={transformations[card[0] + card[1] + val]} />
-                                                )
+                                                switch(card[1]) {
+                                                    case 'o':
+                                                        return <Oval stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:4;`} transform={transformations[card[0] + card[1] + val]} />
+                                                    case 'r':
+                                                        return <Rhombus transform={transformations[card[0] + card[1] + val]} stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:2;`} />
+                                                    case 'w':
+                                                        return <Squigly stylez={`fill:${card[3] == 's' ? `url(#p${card[2]})` : card[3] == 'e' ? 'transparent' : colorMap[card[2]]};stroke:${colorMap[card[2]]};stroke-width:2;`} transform={transformations[card[0] + card[1] + val]} />
+                                                    default:
+                                                        console.error('how the flipidy what?')
+                                                }
                                             })
                                         }
                                         </svg>
                                     </div>
                                     </div>
-                                // </td>
                                 )
                             })}
                             </div>
-                        // </tr>
                         )
                     })}
-                    {/* </div> */}
-                    {/* </table> */}
                     </div>
                 </div>
             }
