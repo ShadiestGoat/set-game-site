@@ -68,8 +68,6 @@ export class Game extends Component<{}, State> {
             won: false,
             wrongs: 0
         }
-        this.setState(this.initer())
-        // this.state = this.initer()
     }
 
     initer():State {
@@ -172,6 +170,7 @@ export class Game extends Component<{}, State> {
     }
 
     componentDidMount() {
+        this.setState(this.initer())
         setInterval(() => {
             if (this.state.won) return
             this.setState({burner: this.state.burner + 1})
