@@ -1,5 +1,5 @@
 /*
-    Thanks to grayshift (https://grayshift.io) for allowing me to steal some of their stuff lmao
+    theft from gray shift? Potentially.
 */
 
 :root {
@@ -39,7 +39,7 @@
     /* align-items: stretch;
     align-content: stretch  ; */
     min-width: 500px;
-    min-height: 580px;
+    min-height: 452px;
     max-height: 100vh;
     max-width: 100vw;
 }
@@ -60,11 +60,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
+    /* cursor: pointer; hahahaha no.*/
     border-radius: 6px;
     width: 11vw;
     height: 31vh;
     min-width: 80px;
+    min-height: 100px;
     /* todo remake propertions,
         also set it to keep them during rescaling
     */
@@ -85,16 +86,6 @@
     display: flex;
     flex-direction: column;
 }
-
-
-
-
-
-
-
-
-
-
 
 .btn {
     display: inline-block;
@@ -172,7 +163,7 @@
 
 p, h1, h2, h3, h4, h5, h6 {
     color: var(--ico) !important;
-    margin: 2% 0 0 0;
+    margin: 0.25vh 0 0 0;
     margin-bottom: 0;
     font-weight: bold;
     text-align: center;

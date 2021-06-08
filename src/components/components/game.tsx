@@ -402,14 +402,12 @@ export class Game extends Component<{}, State> {
                     <p className="text-awhite">Deck: {this.state.deck.length}</p>
                     <p className={`${this.state.hints ? 'text-danger' : 'text-awhite'}`}>Hints used: {this.state.hints}</p>
                     <p className="text-awhite">Time Used: {this.parseDiff(this.state.timeStarted, new Date, false)}</p>
-                    <br />
-                    <button className="btn btn-p" style={{width: '100%', marginBottom: 20}} onClick={(e) => {
+                    <button className="btn btn-p" style={{width: '100%', marginBottom: '3vh', marginTop: '3vh'}} onClick={(e) => {
                         if (e.button == 0) {
                             this.hint()
                         }
                     }} title="Hint (for weaklings)">Hint</button>
-                    <br />
-                    <button className="btn btn-d" style={{marginBottom: 20, width: "100%"}} onClick={(e) => {
+                    <button className="btn btn-d" style={{marginBottom: "4vh", width: "100%"}} onClick={(e) => {
                         if (e.button == 0) {
                             this.setState(this.initer())
                         }
