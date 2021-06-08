@@ -2,6 +2,7 @@ import {Component, h, Fragment} from "preact"
 import { rand } from "../../tools"
 import { FullDeck, keyMap, setCard } from "./gameHelper"
 import { Oval, Rhombus, Squigly } from "./parts/partz/cards"
+import { SetCardGen } from "./parts/setcard"
 import { SvgDefs } from "./svgDefs"
 
 type State = {
@@ -99,8 +100,6 @@ export class Game extends Component<{}, State> {
                 cols = _NewBoardData.cols
             }
         }
-        console.log('god fucking dammit')
-
         return {
             deck: curDeck,
             board: rawBoards,
@@ -310,6 +309,8 @@ export class Game extends Component<{}, State> {
                 }
                 if (newDeck.length == 0 && !this.findSet(board)) {
                     this.win()
+                } else if (newDeck.length == 0 && board.length != 12) {
+                    newCols--
                 } else if (!this.findSet(board)) {
                     const add =this.addRow(false, board, newDeck, newCols)
                     board = add.board
@@ -349,19 +350,7 @@ export class Game extends Component<{}, State> {
                         return (
                             <div style={{paddingLeft: "4px"}} className="card-wrapper">
                             <div className={`game-card ${(selectedCards).includes(card) ? 'card-selected' : ''}`} id={card} onClick={(e) => {if (e.button == 0) this.handleSetSelector(card)}}>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    xmlnsXlink="http://www.w3.org/1999/xlink"
-                                    viewBox="0 0 210 360">
-                                {
-                                    card[1] == 'o' ?
-                                    <Oval card={card} />
-                                    : card[1] == 'r' ?
-                                    <Rhombus card={card} />
-                                    :
-                                    <Squigly card={card} />
-                                }
-                                </svg>
+                                <SetCardGen card={card} />
                             </div>
                             </div>
                         )
