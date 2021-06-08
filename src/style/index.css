@@ -65,8 +65,8 @@
     width: 11vw;
     height: 31vh;
     /* height: 100%; */
-    min-width: 100px;
-    min-height: 125px;
+    min-width: 80px;
+    min-height: 115px;
     justify-content: center;
     overflow-y: hidden;
     padding-top: 4px;

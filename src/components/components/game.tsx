@@ -174,7 +174,7 @@ export class Game extends Component<{}, State> {
 
     componentDidMount() {
         setInterval(() => {
-            if (this.state.won || !this.state.started) return
+            if (this.state.won) return
             this.setState({burner: this.state.burner + 1})
         }, 1000)
         document.addEventListener('keydown', (e) => {
@@ -446,7 +446,7 @@ export class Game extends Component<{}, State> {
                     The rule for a pattern is that if 2 cards share a property, <br />the other one must have that property too.</h3>
                     <button autofocus={true} className="btn btn-d center" onClick={(e) => {
                         if (e.button != 0) return
-                        this.setState(this.initer())
+                        this.setState({started: true})
                     }}>Yessir!</button>
                 </div>
             }
