@@ -1,34 +1,37 @@
 import {Component, h} from "preact"
 import { Color, colorMap, Fill, setCard } from "../../gameHelper"
 
+const stroke = "3.5"
+
 export class Squigly extends Component<{
     card:setCard
 }, {}> {
     render() {
+        const d = "m 129,23.5 c 14.6,0 26,-13.6 36,-20 14.6,-8 31,4 33.4,19 4,23 -12.5,46 -31,56 -23,12.5 -50,8 -75,0 -14.6,-6 -31,-4 -46,4 -8,4 -17,12.5 -25,12.5 -10.4,0 -17,-10.4 -19,-19 C -2,58 4.4,37 15,21.4 23,11 38,5 52.4,5 c 19,0 37.5,8 55.5,14.6 6,2 14.6,4 21,4 z"
         return (
             this.props.card[0] == '1' ?
                 <path
                     fill={fillGen(this.props.card[3], this.props.card[2])}
                     stroke={colorMap[this.props.card[2]]}
-                    strokeWidth="2"
-                    transform="translate(-115,-243) scale(2.1)"
-                    d="m 119,174 c 7,0 12,-6 17,-9 7,-4 15,2 16,9 2,11 -6,22 -15,27 -11,6 -24,4 -36,0 -7,-3 -15,-2 -22,2 -4,2 -8,6 -12,6 -5,0 -8,-5 -9,-9 -2,-9 1,-19 6,-26.5 4,-5 11,-8 18,-8 9,0 18,4 26.6,7 3,1 7,2 10,2 z"
+                    strokeWidth={stroke}
+                    transform="translate(5, 100)"
+                    d={d}
                 />
             : this.props.card[0] == '2' ?
                 <g>
                     <path
                         fill={fillGen(this.props.card[3], this.props.card[2])}
                         stroke={colorMap[this.props.card[2]]}
-                        strokeWidth="2"
-                        transform="translate(-115,-295) scale(2.1)"
-                        d="m 119,174 c 7,0 12,-6 17,-9 7,-4 15,2 16,9 2,11 -6,22 -15,27 -11,6 -24,4 -36,0 -7,-3 -15,-2 -22,2 -4,2 -8,6 -12,6 -5,0 -8,-5 -9,-9 -2,-9 1,-19 6,-26.5 4,-5 11,-8 18,-8 9,0 18,4 26.6,7 3,1 7,2 10,2 z"
+                        strokeWidth={stroke}
+                        transform="translate(5, 41)"
+                        d={d}
                     />
                     <path
                         fill={fillGen(this.props.card[3], this.props.card[2])}
                         stroke={colorMap[this.props.card[2]]}
-                        strokeWidth="2"
-                        transform="translate(-115,-195) scale(2.1)"
-                        d="m 119,174 c 7,0 12,-6 17,-9 7,-4 15,2 16,9 2,11 -6,22 -15,27 -11,6 -24,4 -36,0 -7,-3 -15,-2 -22,2 -4,2 -8,6 -12,6 -5,0 -8,-5 -9,-9 -2,-9 1,-19 6,-26.5 4,-5 11,-8 18,-8 9,0 18,4 26.6,7 3,1 7,2 10,2 z"
+                        strokeWidth={stroke}
+                        transform="translate(5, 153)"
+                        d={d}
                     />
                 </g>
             :
@@ -36,23 +39,23 @@ export class Squigly extends Component<{
                 <path
                     fill={fillGen(this.props.card[3], this.props.card[2])}
                     stroke={colorMap[this.props.card[2]]}
-                    strokeWidth="2"
-                    transform="translate(-115,-343) scale(2.1)"
-                    d="m 119,174 c 7,0 12,-6 17,-9 7,-4 15,2 16,9 2,11 -6,22 -15,27 -11,6 -24,4 -36,0 -7,-3 -15,-2 -22,2 -4,2 -8,6 -12,6 -5,0 -8,-5 -9,-9 -2,-9 1,-19 6,-26.5 4,-5 11,-8 18,-8 9,0 18,4 26.6,7 3,1 7,2 10,2 z"
+                    strokeWidth={stroke}
+                    transform="translate(5, 4)"
+                    d={d}
                 />
                 <path
                     fill={fillGen(this.props.card[3], this.props.card[2])}
                     stroke={colorMap[this.props.card[2]]}
-                    strokeWidth="2"
-                    transform="translate(-115,-243) scale(2.1)"
-                    d="m 119,174 c 7,0 12,-6 17,-9 7,-4 15,2 16,9 2,11 -6,22 -15,27 -11,6 -24,4 -36,0 -7,-3 -15,-2 -22,2 -4,2 -8,6 -12,6 -5,0 -8,-5 -9,-9 -2,-9 1,-19 6,-26.5 4,-5 11,-8 18,-8 9,0 18,4 26.6,7 3,1 7,2 10,2 z"
+                    strokeWidth={stroke}
+                    transform="translate(5, 100)"
+                    d={d}
                 />
                 <path
                     fill={fillGen(this.props.card[3], this.props.card[2])}
                     stroke={colorMap[this.props.card[2]]}
-                    strokeWidth="2"
-                    transform="translate(-115,-143) scale(2.1)"
-                    d="m 119,174 c 7,0 12,-6 17,-9 7,-4 15,2 16,9 2,11 -6,22 -15,27 -11,6 -24,4 -36,0 -7,-3 -15,-2 -22,2 -4,2 -8,6 -12,6 -5,0 -8,-5 -9,-9 -2,-9 1,-19 6,-26.5 4,-5 11,-8 18,-8 9,0 18,4 26.6,7 3,1 7,2 10,2 z"
+                    strokeWidth={stroke}
+                    transform="translate(5, 196)"
+                    d={d}
                 />
             </g>
         )
@@ -70,7 +73,7 @@ export class Oval extends Component<{
                     rx="40" ry="100"
                     fill={fillGen(this.props.card[3], this.props.card[2])}
                     stroke={colorMap[this.props.card[2]]}
-                    strokeWidth="4"
+                    strokeWidth={stroke}
                     transform="translate(15,98)"
                 />
             : this.props.card[0] == '2' ?
@@ -80,7 +83,7 @@ export class Oval extends Component<{
                     rx="40" ry="100"
                     fill={fillGen(this.props.card[3], this.props.card[2])}
                     stroke={colorMap[this.props.card[2]]}
-                    strokeWidth="4"
+                    strokeWidth={stroke}
                     transform="translate(15,43)"
                 />
                 <rect
@@ -88,7 +91,7 @@ export class Oval extends Component<{
                     rx="40" ry="100"
                     fill={fillGen(this.props.card[3], this.props.card[2])}
                     stroke={colorMap[this.props.card[2]]}
-                    strokeWidth="4"
+                    strokeWidth={stroke}
                     transform="translate(15,143)"
                 />
             </g> :
@@ -98,7 +101,7 @@ export class Oval extends Component<{
                     rx="40" ry="100"
                     fill={fillGen(this.props.card[3], this.props.card[2])}
                     stroke={colorMap[this.props.card[2]]}
-                    strokeWidth="4"
+                    strokeWidth={stroke}
                     transform="translate(15,2)"
                 />
                 <rect
@@ -106,7 +109,7 @@ export class Oval extends Component<{
                     rx="40" ry="100"
                     fill={fillGen(this.props.card[3], this.props.card[2])}
                     stroke={colorMap[this.props.card[2]]}
-                    strokeWidth="4"
+                    strokeWidth={stroke}
                     transform="translate(15,98)"
                 />
                 <rect
@@ -114,7 +117,7 @@ export class Oval extends Component<{
                     rx="40" ry="100"
                     fill={fillGen(this.props.card[3], this.props.card[2])}
                     stroke={colorMap[this.props.card[2]]}
-                    strokeWidth="4"
+                    strokeWidth={stroke}
                     transform="translate(15,194)"
                 />
             </g>
@@ -134,48 +137,49 @@ export class Rhombus extends Component<{
     card:setCard
 }, {}> {
     render() {
+        const p = "105,70 200,105 105,140 10,105 105,70"
         return (
             this.props.card[0] == '1' ?
                 <polyline
-                points="105,70 203,105 105,140 7,105 105,70"
+                points={p}
                 fill={fillGen(this.props.card[3], this.props.card[2])}
                 stroke={colorMap[this.props.card[2]]}
-                strokeWidth="2"
+                strokeWidth={stroke}
                 transform="translate(0,40)" /> :
             this.props.card[0] == '2' ?
             <g>
                 <polyline
-                points="105,70 203,105 105,140 7,105 105,70"
+                points={p}
                 fill={fillGen(this.props.card[3], this.props.card[2])}
                 stroke={colorMap[this.props.card[2]]}
-                strokeWidth="2"
+                strokeWidth={stroke}
                 transform="translate(0,-10)" />
                 <polyline
-                points="105,70 203,105 105,140 7,105 105,70"
+                points={p}
                 fill={fillGen(this.props.card[3], this.props.card[2])}
                 stroke={colorMap[this.props.card[2]]}
-                strokeWidth="2"
+                strokeWidth={stroke}
                 transform="translate(0,90)" />
             </g>
             :
             <g>
                 <polyline
-                points="105,70 203,105 105,140 7,105 105,70"
+                points={p}
                 fill={fillGen(this.props.card[3], this.props.card[2])}
                 stroke={colorMap[this.props.card[2]]}
-                strokeWidth="2"
+                strokeWidth={stroke}
                 transform="translate(0,-62)" />
                 <polyline
-                points="105,70 203,105 105,140 7,105 105,70"
+                points={p}
                 fill={fillGen(this.props.card[3], this.props.card[2])}
                 stroke={colorMap[this.props.card[2]]}
-                strokeWidth="2"
+                strokeWidth={stroke}
                 transform="translate(0,40)" />
                 <polyline
-                points="105,70 203,105 105,140 7,105 105,70"
+                points={p}
                 fill={fillGen(this.props.card[3], this.props.card[2])}
                 stroke={colorMap[this.props.card[2]]}
-                strokeWidth="2"
+                strokeWidth={stroke}
                 transform="translate(0,140)" />
             </g>
         )
