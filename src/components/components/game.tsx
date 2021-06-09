@@ -170,7 +170,6 @@ export class Game extends Component<{}, State> {
     }
 
     componentDidMount() {
-        this.setState(this.initer())
         setInterval(() => {
             if (this.state.won) return
             this.setState({burner: this.state.burner + 1})
@@ -184,6 +183,7 @@ export class Game extends Component<{}, State> {
                 this.handleSetSelector(card)
             }
         })
+        this.setState(this.initer())
     }
 
     findNeededCard(card1:setCard, card2:setCard):(setCard | false) {
@@ -246,7 +246,10 @@ export class Game extends Component<{}, State> {
         newSel[adr[0]] = true
         newSel[adr[1]] = true
         sel = [this.state.board[adr[0]], this.state.board[adr[1]]]
-        this.setState({selected: newSel, selectedCards: sel, hints: this.state.hints + 1, boardCache: this.genBoard(this.state.board, this.state.cols, sel)})
+        // this.setState({selected: newSel, selectedCards: sel, hints: this.state.hints + 1, boardCache: this.genBoard(this.state.board, this.state.cols, sel)})
+        this.handleSetSelector(this.state.board[adr[0]])
+        this.handleSetSelector(this.state.board[adr[1]])
+        this.handleSetSelector(this.state.board[adr[2]])
     }
 
     win() {
@@ -306,15 +309,27 @@ export class Game extends Component<{}, State> {
                     board.splice(board.indexOf(oldSel[1]), 1)
                     newCols--
                 }
-                if (newDeck.length == 0 && !this.findSet(board)) {
-                    this.win()
-                } else if (newDeck.length == 0 && board.length != 12) {
-                    newCols--
+                if (newDeck.length == 0) {
+                    //end game logic
+                    if (!this.findSet(board)) {
+                        this.win()
+                        return
+                    }
+                    board = board.filter((val) => val ? true : false)
+                    if (board.length < 12) {
+                        newCols--
+                    }
                 } else if (!this.findSet(board)) {
                     const add =this.addRow(false, board, newDeck, newCols)
                     board = add.board
                     newDeck = add.deck
                     newCols = add.cols
+                    if (!this.findSet(board)) {
+                        const _add =this.addRow(false, board, newDeck, newCols)
+                        board = _add.board
+                        newDeck = _add.deck
+                        newCols = _add.cols
+                    }
                 }
             } else {
                 this.setState({wrongs: this.state.wrongs + 1})
