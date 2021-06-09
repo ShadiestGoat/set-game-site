@@ -246,10 +246,10 @@ export class Game extends Component<{}, State> {
         newSel[adr[0]] = true
         newSel[adr[1]] = true
         sel = [this.state.board[adr[0]], this.state.board[adr[1]]]
-        // this.setState({selected: newSel, selectedCards: sel, hints: this.state.hints + 1, boardCache: this.genBoard(this.state.board, this.state.cols, sel)})
-        this.handleSetSelector(this.state.board[adr[0]])
-        this.handleSetSelector(this.state.board[adr[1]])
-        this.handleSetSelector(this.state.board[adr[2]])
+        this.setState({selected: newSel, selectedCards: sel, hints: this.state.hints + 1, boardCache: this.genBoard(this.state.board, this.state.cols, sel)})
+        // this.handleSetSelector(this.state.board[adr[0]])
+        // this.handleSetSelector(this.state.board[adr[1]])
+        // this.handleSetSelector(this.state.board[adr[2]])
     }
 
     win() {
