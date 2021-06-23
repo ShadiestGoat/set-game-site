@@ -1,9 +1,9 @@
 {
   "name": "Set by Shady",
-  "short_name": "Set game",
+  "short_name": "Shady Set",
   "start_url": "/",
   "display": "standalone",
-  "orientation": "vertical",
+  "orientation": "horizontal",
   "theme_color": "#6d10ff",
   "icons": [
     {

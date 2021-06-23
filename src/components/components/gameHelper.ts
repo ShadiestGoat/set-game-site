@@ -13,7 +13,7 @@ export const cardType = [
 ]
 export const colorMap:{[key:string]:string} = {
     'r': '#bd0000',
-    'p': '#761068',
+    'p': '#761068', //todo make new color
     'g': '#00aa00'
 }
 
@@ -53,3 +53,59 @@ export const keyMap: {[key: string]: [number, number]} = {
     'x': [2, 1],
     'c': [2, 2]
 }
+
+export type Split = {
+    name: string,
+    best: number,
+    fin: number
+}
+
+new Date("19 minutes 20 seconds")
+
+export const splitsD:Split[] = [
+    {
+        name: "3 Sets",
+        best: 11166,
+        fin: 3,
+    },
+    {
+        name: "6 Sets",
+        best: 38052,
+        fin: 6
+    },
+    {
+        name: "8 Sets",
+        best: 13191,
+        fin: 8
+    },
+    {
+        name: "11 Sets",
+        best: 25269,
+        fin: 11
+    },
+    {
+        name: "14 Sets",
+        best: 30636,
+        fin: 14
+    },
+    {
+        name: "17 Sets",
+        best: 23853,
+        fin: 17
+    },
+    {
+        name: "20 Sets",
+        best: 26134,
+        fin: 20
+    },
+    {
+        name: "23 Sets",
+        best: 13171,
+        fin: 23
+    },
+    {
+        name: "Game finished",
+        best: 14000,
+        fin: -1
+    }
+]

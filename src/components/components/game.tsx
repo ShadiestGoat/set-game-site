@@ -1,7 +1,8 @@
+import { TouchBarScrubber } from "electron"
 import {Component, h, Fragment} from "preact"
-import { rand } from "../../tools"
-import { FullDeck, keyMap, setCard } from "./gameHelper"
-import { Oval, Rhombus, Squigly } from "./parts/partz/cards"
+import { rand, timeFormat } from "../../tools"
+import { FullDeck, keyMap, setCard, Split, splitsD } from "./gameHelper"
+import { LiveSplit } from "./Livesplit"
 import { SetCardGen } from "./parts/setcard"
 import { SvgDefs } from "./svgDefs"
 
@@ -21,6 +22,13 @@ type State = {
     boardCache: JSX.Element
     won: boolean
     started: boolean
+    splits: {
+        doneSplits: {[key:string]:number}
+        CurSplitName: string,
+        splits: Split[],
+        splitTimeS: number
+    },
+    displayClock: boolean
 }
 
 export class Game extends Component<{}, State> {
@@ -66,7 +74,14 @@ export class Game extends Component<{}, State> {
             timeFin: false,
             timeStarted: new Date(),
             won: false,
-            wrongs: 0
+            wrongs: 0,
+            splits: {
+                splits: splitsD,
+                CurSplitName: splitsD[0].name,
+                doneSplits: {},
+                splitTimeS: Date.now()
+            },
+            displayClock: true
         }
     }
 
@@ -113,7 +128,14 @@ export class Game extends Component<{}, State> {
             timeFin: false,
             burner: 0,
             started: true,
-            boardCache: this.genBoard(rawBoards, cols, [])
+            boardCache: this.genBoard(rawBoards, cols, []),
+            splits: {
+                splits: splitsD,
+                CurSplitName: splitsD[0].name,
+                doneSplits: {},
+                splitTimeS: Date.now()
+            },
+            displayClock: this.state.displayClock
         }
     }
 
@@ -153,7 +175,7 @@ export class Game extends Component<{}, State> {
     parseDiff(start:Date, stop:Date, ms:boolean = true) {
         const totTime = stop.getTime() - start.getTime()
         const time = new Date(totTime)
-        return `${time.getHours() -1 ? ((time.getHours() -1).toString().length == 1 ? `0:${time.getHours() -1}` : time.getHours() -1) + ':' : ''}${time.getMinutes() ? (time.getMinutes().toString().length == 1 ? `0${time.getMinutes()}` : time.getMinutes()) : '00'}:${time.getSeconds().toString().length == 1 ? `0${time.getSeconds()}` : time.getSeconds()}${ms ? ':' + time.getMilliseconds() : ''}`
+        return timeFormat(time, ms)
     }
 
     findSet(raw:setCard[]):(false | [number, number, number]) {
@@ -170,10 +192,6 @@ export class Game extends Component<{}, State> {
     }
 
     componentDidMount() {
-        setInterval(() => {
-            if (this.state.won) return
-            this.setState({burner: this.state.burner + 1})
-        }, 1000)
         document.addEventListener('keydown', (e) => {
             if (e.key == 'r' && !e.ctrlKey) {
                 this.setState(this.initer())
@@ -253,9 +271,23 @@ export class Game extends Component<{}, State> {
     }
 
     win() {
+        const time = new Date()
+        console.log(this.state.hints ? "Hints were used" : this.parseDiff(this.state.timeStarted, time))
+        let splits = this.state.splits
+        splits.doneSplits["Game finished"] = time.getTime() - splits.splitTimeS
+        console.log(splits.doneSplits)
+        splits.splits = splits.splits.map((val) => {
+            return {
+                fin: val.fin,
+                name: val.name,
+                best: splits.doneSplits[val.name] > val.best ? splits.doneSplits[val.name] : val.best,
+            }
+        })
+
         this.setState({
             won: true,
-            timeFin: new Date()
+            timeFin: time,
+            splits: splits
         })
     }
 
@@ -267,7 +299,7 @@ export class Game extends Component<{}, State> {
         let selected = this.state.selectedCards
         let newDeck = this.state.deck
         let newCols = this.state.cols
-
+        let splits = this.state.splits
         if (newSel[index]) {
             selected.push(card)
         } else {
@@ -309,6 +341,15 @@ export class Game extends Component<{}, State> {
                     board.splice(board.indexOf(oldSel[1]), 1)
                     newCols--
                 }
+                if (found.length == splits.splits[splits.splits.indexOf(splits.splits.filter((val) => val.name == splits.CurSplitName)[0])].fin) {
+                    let nextS = splits.splits[splits.splits.indexOf(splits.splits.filter((val) => val.name == splits.CurSplitName)[0]) + 1]
+                    if (nextS) {
+                        splits.doneSplits[splits.CurSplitName] = Date.now() - splits.splitTimeS
+                        console.log(splits.doneSplits[splits.CurSplitName] = Date.now() - splits.splitTimeS)
+                        splits.splitTimeS = Date.now()
+                        splits.CurSplitName = nextS.name
+                    }
+                }
                 if (newDeck.length == 0) {
                     //end game logic
                     if (!this.findSet(board)) {
@@ -331,11 +372,13 @@ export class Game extends Component<{}, State> {
                         newCols = _add.cols
                     }
                 }
+
+
             } else {
                 this.setState({wrongs: this.state.wrongs + 1})
             }
         }
-        this.setState({selected: newSel, selectedCards: selected, setsFound:found, deck:newDeck, board: board, cols: newCols, boardCache: this.genBoard(board, newCols, selected)})
+        this.setState({selected: newSel, selectedCards: selected, setsFound:found, deck:newDeck, board: board, cols: newCols, boardCache: this.genBoard(board, newCols, selected), splits: splits})
     }
 
     boardParser(raw:setCard[] = this.state.board, cols = this.state.cols):setCard[][] {
@@ -416,7 +459,6 @@ export class Game extends Component<{}, State> {
                     <p className="text-awhite">Wrong Guesses: {this.state.wrongs}</p>
                     <p className="text-awhite">Deck: {this.state.deck.length}</p>
                     <p className={`${this.state.hints ? 'text-danger' : 'text-awhite'}`}>Hints used: {this.state.hints}</p>
-                    <p className="text-awhite">Time Used: {this.parseDiff(this.state.timeStarted, new Date, false)}</p>
                     <button className="btn btn-p" style={{width: '100%', marginBottom: '3vh', marginTop: '3vh'}} onClick={(e) => {
                         if (e.button == 0) {
                             this.hint()
@@ -434,10 +476,22 @@ export class Game extends Component<{}, State> {
                     }}>
                         <button className="btn help-btn btn-d">?</button>
                     </div>
+                    <button className="btn btn-p" style={{marginTop: '5vh', width: "100%"}} onClick={(e) => {if (e.button != 0) return; this.setState({displayClock: !this.state.displayClock})}}>Toggle Clock</button>
                     </div>
                     <div className="gameBoard">
                     {this.state.boardCache}
                     </div>
+                    {
+                        this.state.displayClock ?
+                        <LiveSplit
+                            curSplitTime={this.state.splits.splitTimeS}
+                            splitName={this.state.splits.CurSplitName}
+                            splits={this.state.splits.splits}
+                            totTime={this.state.timeStarted.getTime()}
+                            done={this.state.splits.doneSplits}
+                        />
+                        : <div />
+                    }
                 </div>
                 : <div className="AccepterBby">
                     <h1>Hello and welcome to Set!</h1>
