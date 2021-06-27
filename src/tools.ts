@@ -1,8 +1,12 @@
+import { isSafari } from "react-device-detect"
+
 export function rand(min:number, max:number):number {
     return Math.floor(Math.random()*(max-min+1)+min)
 }
 export function timeFormat(time:Date | number, ms:boolean = true) {
-    if (typeof time == "number") time = new Date(time)
+    if (typeof time == "number") time = new Date(isSafari ? time + 60 * 60 * 1000 : time)
+    else if (isSafari) time = new Date(time.getTime() + 60 * 60 * 1000)
+
     let mss = ""
     if (ms) {
         let _mss = time.getMilliseconds()

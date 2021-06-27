@@ -62,7 +62,7 @@ export type Split = {
 
 new Date("19 minutes 20 seconds")
 
-export const splitsD:Split[] = [
+export const splitsE:Split[] = [
     {
         name: "3 Sets",
         best: 11166,
@@ -106,6 +106,54 @@ export const splitsD:Split[] = [
     {
         name: "Game finished",
         best: 14000,
+        fin: -1
+    }
+]
+
+export const splitsB:Split[] = [
+    {
+        name: "3 Sets",
+        best: 21166,
+        fin: 3,
+    },
+    {
+        name: "6 Sets",
+        best: 48052,
+        fin: 6
+    },
+    {
+        name: "8 Sets",
+        best: 23191,
+        fin: 8
+    },
+    {
+        name: "11 Sets",
+        best: 30269,
+        fin: 11
+    },
+    {
+        name: "14 Sets",
+        best: 35636,
+        fin: 14
+    },
+    {
+        name: "17 Sets",
+        best: 29853,
+        fin: 17
+    },
+    {
+        name: "20 Sets",
+        best: 31134,
+        fin: 20
+    },
+    {
+        name: "23 Sets",
+        best: 21171,
+        fin: 23
+    },
+    {
+        name: "Game finished",
+        best: 21000,
         fin: -1
     }
 ]

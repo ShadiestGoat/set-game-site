@@ -1,2 +1,3 @@
 # set-game-site
-2 day coding thing I wanted to try out for a bit... Don't judge the code too hard ;D
+
+The board game 'Set', digitalized. You are free to download this bad boy and run it off your own server if you want to, there's nothing really stopping you haha

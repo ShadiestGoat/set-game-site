@@ -4,6 +4,8 @@
 
 :root {
    --ico: rgb(225, 222, 222);
+   --secondary: #2d2d2d;
+   --disabled: #9191a1;
    background-color: #202124 !important;
 }
 
@@ -13,7 +15,7 @@
     margin-top: 1% !important;
 }
 
-.rootWrapperAmIRightFellas > svg {
+.rootWrapper > svg {
     height: 0 !important;
     padding: 0 !important;
     margin: 0 !important;
@@ -279,4 +281,61 @@ button {
     flex: 0 0 auto;
     width: 37%;
     text-align: right;
+}
+
+.w-col {
+    flex: 0 0 auto;
+    width: 67%;
+    text-align: left;
+    justify-content: center;
+}
+
+.w-col-2 {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;
+    width: 33%;
+    padding: 3px;
+    border: 3px solid darkgrey;
+}
+.win-s {
+    display: flex;
+    height: 97vh;
+}
+
+.navbar-wrapper {
+    display: flex;
+    background-color: var(--secondary);
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+}
+
+.navbar {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+}
+
+.nav-item {
+    margin-right: 3vw;
+}
+
+.navbar-item-1 {
+    margin-left: 1.5vw;
+}
+
+.navbar-item-last {
+    margin-right: 1.5vw;
+}
+
+.nav-link {
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 110%;
+    color: var(--disabled)
+}
+.active {
+    color: var(--ico);
 }

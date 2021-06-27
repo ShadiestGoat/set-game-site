@@ -1,7 +1,7 @@
 import { TouchBarScrubber } from "electron"
 import {Component, h, Fragment} from "preact"
 import { rand, timeFormat } from "../../tools"
-import { FullDeck, keyMap, setCard, Split, splitsD } from "./gameHelper"
+import { FullDeck, keyMap, setCard, Split, splitsB, splitsE } from "./gameHelper"
 import { LiveSplit } from "./Livesplit"
 import { SetCardGen } from "./parts/setcard"
 import { SvgDefs } from "./svgDefs"
@@ -25,10 +25,12 @@ type State = {
     splits: {
         doneSplits: {[key:string]:number}
         CurSplitName: string,
-        splits: Split[],
+        BeginnerSplits: Split[],
+        ExpertSplits: Split[],
         splitTimeS: number
     },
-    displayClock: boolean
+    displayClock: boolean,
+    timerMode: "Expert" | "Beginner"
 }
 
 export class Game extends Component<{}, State> {
@@ -76,12 +78,14 @@ export class Game extends Component<{}, State> {
             won: false,
             wrongs: 0,
             splits: {
-                splits: splitsD,
-                CurSplitName: splitsD[0].name,
+                BeginnerSplits: splitsB,
+                ExpertSplits: splitsE,
+                CurSplitName: splitsB[0].name,
                 doneSplits: {},
                 splitTimeS: Date.now()
             },
-            displayClock: true
+            displayClock: true,
+            timerMode: "Beginner"
         }
     }
 
@@ -130,12 +134,14 @@ export class Game extends Component<{}, State> {
             started: true,
             boardCache: this.genBoard(rawBoards, cols, []),
             splits: {
-                splits: splitsD,
-                CurSplitName: splitsD[0].name,
+                BeginnerSplits: this.state.splits.BeginnerSplits,
+                ExpertSplits: this.state.splits.ExpertSplits,
+                CurSplitName: splitsB[0].name,
                 doneSplits: {},
                 splitTimeS: Date.now()
             },
-            displayClock: this.state.displayClock
+            displayClock: this.state.displayClock,
+            timerMode: this.state.timerMode
         }
     }
 
@@ -253,8 +259,8 @@ export class Game extends Component<{}, State> {
     }
 
     hint() {
+        console.log("A hint was used!")
         const adr = this.findSet(this.state.board)
-
         let newSel:boolean[] = []
         let sel:any[] = []
         for (let i = 0; i < this.state.cols * 3; i++) {
@@ -276,7 +282,8 @@ export class Game extends Component<{}, State> {
         let splits = this.state.splits
         splits.doneSplits["Game finished"] = time.getTime() - splits.splitTimeS
         console.log(splits.doneSplits)
-        splits.splits = splits.splits.map((val) => {
+        // @ts-ignore
+        splits[`${this.state.timerMode}Splits`] = splits[`${this.state.timerMode}Splits`].map((val:Split) => {
             return {
                 fin: val.fin,
                 name: val.name,
@@ -341,8 +348,14 @@ export class Game extends Component<{}, State> {
                     board.splice(board.indexOf(oldSel[1]), 1)
                     newCols--
                 }
-                if (found.length == splits.splits[splits.splits.indexOf(splits.splits.filter((val) => val.name == splits.CurSplitName)[0])].fin) {
-                    let nextS = splits.splits[splits.splits.indexOf(splits.splits.filter((val) => val.name == splits.CurSplitName)[0]) + 1]
+                // splits[`${this.state.timerMode}Splits`]
+                const typeTT = this.state.timerMode
+                // @ts-ignore
+                const indexx:number = splits[`${typeTT}Splits`].indexOf(splits[`${typeTT}Splits`].filter((val) => val.name == splits.CurSplitName)[0])
+                // @ts-ignore
+                if (found.length == splits[`${typeTT}Splits`][indexx].fin) {
+                    // @ts-ignore
+                    let nextS:Split = splits[`${typeTT}Splits`][indexx + 1]
                     if (nextS) {
                         splits.doneSplits[splits.CurSplitName] = Date.now() - splits.splitTimeS
                         console.log(splits.doneSplits[splits.CurSplitName] = Date.now() - splits.splitTimeS)
@@ -406,7 +419,8 @@ export class Game extends Component<{}, State> {
                     {row.map((card) => {if (!card) return
                         return (
                             <div style={{paddingLeft: "4px"}} className="card-wrapper">
-                            <div className={`game-card ${(selectedCards).includes(card) ? 'card-selected' : ''}`} id={card} onClick={(e) => {if (e.button == 0) this.handleSetSelector(card)}}>
+                            <div className={`game-card ${(selectedCards).includes(card) ? 'card-selected' : ''}`} id={card} onClick={(e) => {
+                                if (e.button == 0) this.handleSetSelector(card)}}>
                                 <SetCardGen card={card} />
                             </div>
                             </div>
@@ -425,29 +439,26 @@ export class Game extends Component<{}, State> {
             {
                 this.state.started ?
                 this.state.won ?
-                    <div className="infoCol">
-                        <h1>You did it! Congrats!</h1>
-                        <h1>Time: {this.parseDiff(this.state.timeStarted, this.state.timeFin as Date)}</h1>
-                        <h1>Hints used: {this.state.hints}</h1>
-                        <h1>Wrong guesses: {this.state.wrongs}</h1>
-
-                        <div className="yahhoo" style={{marginTop: 200}}>
-                            <button className="btn btn-p" onClick={(e) => {
-                            e.preventDefault()
-                            e.button == 0 ? this.setState( this.initer() ) : {}
-                            }}>Play again</button>
-                            <button className="btn btn-p" onClick={(e) => {
-                            e.preventDefault()
-                            e.button == 0 ? this.setState( this.initer() ) : {}
-                            }}>You have no choice</button>
-                            <button className="btn btn-p" onClick={(e) => {
-                            e.preventDefault()
-                            e.button == 0 ? this.setState( this.initer() ) : {}
-                            }}>No, but like you really have 0 choice here</button>
-                            <button className="btn btn-p" onClick={(e) => {
-                            e.preventDefault()
-                            e.button == 0 ? this.setState( this.initer() ) : {}
-                            }}>You will play again, I know it</button>
+                    <div className="win-s">
+                        <div className="w-col">
+                            <div style={{display: "flex", flexDirection: "column"}}>
+                                <h1>You did it! Congrats!</h1>
+                                <h1>Hints used: {this.state.hints}</h1>
+                                <h1>Wrong guesses: {this.state.wrongs}</h1>
+                            </div>
+                        </div>
+                        <div className="w-col-2">
+                            {
+                                Object.keys(this.state.splits.doneSplits).map((name) => {
+                                    const time = this.state.splits.doneSplits[name]
+                                    return (
+                                        <div className="w-row">
+                                            <div className="w-r-col" style={{width:"40%", textAlign: "left"}}>{timeFormat(time, true)}</div>
+                                            <div className="w-r-col" style={{width:"60%", textAlign: "right"}}>{timeFormat(time, true)}</div>
+                                        </div>
+                                    )
+                                })
+                            }
                         </div>
                     </div>
                 : <div className="boardGameWrapper">
@@ -477,6 +488,7 @@ export class Game extends Component<{}, State> {
                         <button className="btn help-btn btn-d">?</button>
                     </div>
                     <button className="btn btn-p" style={{marginTop: '5vh', width: "100%"}} onClick={(e) => {if (e.button != 0) return; this.setState({displayClock: !this.state.displayClock})}}>Toggle Clock</button>
+                    <button className="btn btn-p" style={{marginTop: '1.5vh', width: "100%"}} onClick={(e) => {if (e.button != 0) return; this.setState({timerMode: this.state.timerMode == "Beginner" ? "Expert" : "Beginner"})}}>Toggle Clock Type</button>
                     </div>
                     <div className="gameBoard">
                     {this.state.boardCache}
@@ -486,7 +498,8 @@ export class Game extends Component<{}, State> {
                         <LiveSplit
                             curSplitTime={this.state.splits.splitTimeS}
                             splitName={this.state.splits.CurSplitName}
-                            splits={this.state.splits.splits}
+                            // @ts-ignore
+                            splits={this.state.splits[`${this.state.timerMode}Splits`]}
                             totTime={this.state.timeStarted.getTime()}
                             done={this.state.splits.doneSplits}
                         />

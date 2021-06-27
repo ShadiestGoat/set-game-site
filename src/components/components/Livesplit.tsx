@@ -37,7 +37,7 @@ export class LiveSplit extends Component<Props, State> {
         this.timeFormat = timeFormat.bind(this)
     }
     componentDidMount() {
-        this.interval = setInterval(() => {this.setState({burner: !this.state.burner})}, 9)
+        this.interval = setInterval(() => {this.setState({burner: !this.state.burner})}, 59)
     }
 
     componentWillUnmount() {
@@ -63,8 +63,8 @@ export class LiveSplit extends Component<Props, State> {
                     <div className="timer-t-name">
                         {val.name}
                     </div>
-                    <div className={`timer-t-time`} style={{color: timetodisplay > val.best ? "red" : "green"}}>
-                        {displaytime ? (val.best < timetodisplay ? "+" : "-") + timeFormat(Math.abs(val.best - timetodisplay)) : ""}
+                    <div className={`timer-t-time`} style={{color: timetodisplay > tottime ? "red" : "green"}}>
+                        {displaytime ? (tottime < timetodisplay ? "+" : "-") + timeFormat(Math.abs(tottime - timetodisplay)) : ""}
                     </div>
                     <div className="timer-t-best">
                         {timeFormat(tottime)}
