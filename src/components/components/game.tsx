@@ -1,5 +1,4 @@
-import { TouchBarScrubber } from "electron"
-import {Component, h, Fragment} from "preact"
+import { Component, Fragment, h } from "preact"
 import { rand, timeFormat } from "../../tools"
 import { FullDeck, keyMap, setCard, Split, splitsB, splitsE } from "./gameHelper"
 import { LiveSplit } from "./Livesplit"
