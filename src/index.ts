@@ -1,3 +1,4 @@
+import 'preact/debug'
 import './style/index.css';
 // import 'bootstrap/dist/css/bootstrap.min.css'
 // import './style/_base.css';

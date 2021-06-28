@@ -8,9 +8,8 @@ const App: FunctionalComponent = () => {
     return (
         <div id="preact_root">
             <Router>
-                {/* <Route path="/" component={IndexPage} /> */}
+                <Route path="/" component={IndexPage} />
                 <Route path="/s" component={GameS} />
-                <Route path="/" component={GameS} />
                 <NotFoundPage default />
             </Router>
         </div>

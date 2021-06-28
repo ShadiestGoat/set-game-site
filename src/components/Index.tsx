@@ -1,7 +1,6 @@
 import {Component, h} from "preact"
 import { Game } from "./components/game"
 import { Helmet } from "@notwoods/preact-helmet"
-import { SvgDefs } from "./components/svgDefs"
 import {isMobileOnly} from "react-device-detect"
 
 export class GameS extends Component {

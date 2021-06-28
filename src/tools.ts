@@ -22,5 +22,5 @@ export function timeFormat(time:Date | number, ms:boolean = true) {
                 break
             }
         }
-    return `${time.getHours() -1 ? ((time.getHours() -1).toString().length == 1 ? `0${time.getHours() -1}:` : time.getHours() -1) + ':' : ''}${time.getMinutes() ? (time.getMinutes().toString().length == 1 ? `0${time.getMinutes()}` : time.getMinutes()) : '00'}:${time.getSeconds().toString().length == 1 ? `0${time.getSeconds()}` : time.getSeconds()}${ms ? mss : ''}`
+    return `${time.getHours() -1 ? ((time.getHours() -1).toString().length == 1 ? `0${time.getHours() -1}:` : (time.getHours() -1) + ':') : ''}${time.getMinutes() ? (time.getMinutes().toString().length == 1 ? `0${time.getMinutes()}` : time.getMinutes()) : '00'}:${time.getSeconds().toString().length == 1 ? `0${time.getSeconds()}` : time.getSeconds()}${ms ? mss : ''}`
 }

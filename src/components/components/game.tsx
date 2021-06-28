@@ -1,9 +1,12 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faHome } from "@fortawesome/free-solid-svg-icons"
 import { Component, Fragment, h } from "preact"
 import { rand, timeFormat } from "../../tools"
 import { FullDeck, keyMap, setCard, Split, splitsB, splitsE } from "./gameHelper"
 import { LiveSplit } from "./Livesplit"
 import { SetCardGen } from "./parts/setcard"
 import { SvgDefs } from "./svgDefs"
+
 
 type State = {
     setsFound: [setCard, setCard, setCard][],
@@ -281,14 +284,17 @@ export class Game extends Component<{}, State> {
         let splits = this.state.splits
         splits.doneSplits["Game finished"] = time.getTime() - splits.splitTimeS
         console.log(splits.doneSplits)
-        // @ts-ignore
-        splits[`${this.state.timerMode}Splits`] = splits[`${this.state.timerMode}Splits`].map((val:Split) => {
-            return {
-                fin: val.fin,
-                name: val.name,
-                best: splits.doneSplits[val.name] > val.best ? splits.doneSplits[val.name] : val.best,
-            }
-        })
+        if (this.state.hints) {
+            // @ts-ignore
+            splits[`${this.state.timerMode}Splits`] = splits[`${this.state.timerMode}Splits`].map((val:Split) => {
+                return {
+                    fin: val.fin,
+                    name: val.name,
+                    best: splits.doneSplits[val.name] > val.best ? splits.doneSplits[val.name] : val.best,
+                }
+            })
+        }
+        splits.doneSplits = {}
 
         this.setState({
             won: true,
@@ -436,7 +442,6 @@ export class Game extends Component<{}, State> {
         <div className="scontainer game-container"
         ><SvgDefs />
             {
-                this.state.started ?
                 this.state.won ?
                     <div className="win-s">
                         <div className="w-col">
@@ -469,25 +474,25 @@ export class Game extends Component<{}, State> {
                     <p className="text-awhite">Wrong Guesses: {this.state.wrongs}</p>
                     <p className="text-awhite">Deck: {this.state.deck.length}</p>
                     <p className={`${this.state.hints ? 'text-danger' : 'text-awhite'}`}>Hints used: {this.state.hints}</p>
-                    <button className="btn btn-p" style={{width: '100%', marginBottom: '3vh', marginTop: '3vh'}} onClick={(e) => {
-                        if (e.button == 0) {
-                            this.hint()
-                        }
-                    }} title="Hint (for weaklings)">Hint</button>
-                    <button className="btn btn-d" style={{marginBottom: "4vh", width: "100%"}} onClick={(e) => {
+                    <button className="btn btn-d" onClick={(e) => {
                         if (e.button == 0) {
                             this.setState(this.initer())
                         }
                     }} title="Restart the game (r)" >Restart</button>
-                    <p className="warning">{this.state.hintErr}</p>
-                    <div className="helperbtn-w" title="Help!" onClick={(e) => {
-                        if (e.button != 0) return
-                        this.setState({started: false})
-                    }}>
-                        <button className="btn help-btn btn-d">?</button>
-                    </div>
-                    <button className="btn btn-p" style={{marginTop: '5vh', width: "100%"}} onClick={(e) => {if (e.button != 0) return; this.setState({displayClock: !this.state.displayClock})}}>Toggle Clock</button>
-                    <button className="btn btn-p" style={{marginTop: '1.5vh', width: "100%"}} onClick={(e) => {if (e.button != 0) return; this.setState({timerMode: this.state.timerMode == "Beginner" ? "Expert" : "Beginner"})}}>Toggle Clock Type</button>
+                    <button className="btn btn-p" onClick={(e) => {
+                        if (e.button == 0) {
+                            this.hint()
+                        }
+                    }} title="Hint (for weaklings)">Hint</button>
+                    {
+                        this.state.hintErr ?
+                        <p className="warning">{this.state.hintErr}</p> : <div/>
+                    }
+                    <button className="btn btn-p" onClick={(e) => {if (e.button != 0) return; this.setState({displayClock: !this.state.displayClock})}}>Toggle Clock</button>
+                    <button className="btn btn-p" onClick={(e) => {if (e.button != 0) return; this.setState({timerMode: this.state.timerMode == "Beginner" ? "Expert" : "Beginner"})}}>Change Type</button>
+                    <a href="/" className="btn btn-d" style={{borderRadius: "50%", padding: '0px', width: "6vw", height: "6vw", display: "flex", alignItems: "center", justifyContent: "center", margin: "auto auto", marginTop: "4vh"}}>
+                        <FontAwesomeIcon style={{fontSize: '2.7vw'}} icon={faHome} /></a>
+
                     </div>
                     <div className="gameBoard">
                     {this.state.boardCache}
@@ -504,17 +509,6 @@ export class Game extends Component<{}, State> {
                         />
                         : <div />
                     }
-                </div>
-                : <div className="AccepterBby">
-                    <h1>Hello and welcome to Set!</h1>
-                    <h3>The rules are simple; You have to find all the sets, as fast as possible! <br />
-                    A "set" is a group of 3 cards, which all follow a specific pattern. <br />
-                    Each card has 4 properties: shape, color, number and fill type.<br />
-                    The rule for a pattern is that if 2 cards share a property, <br />the other one must have that property too.</h3>
-                    <button autofocus={true} className="btn btn-d center" onClick={(e) => {
-                        if (e.button != 0) return
-                        this.setState({started: true})
-                    }}>Yessir!</button>
                 </div>
             }
             </div>
