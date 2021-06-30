@@ -1,0 +1,40 @@
+.navbarWrapper {
+    display: flex;
+    background-color: var(--secondary);
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+}
+
+.navbar {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+}
+
+.navItem {
+    margin-right: 3vw;
+}
+
+.navbarItemFirst {
+    margin-left: 1.5vw;
+}
+
+.navbarItemLast {
+    margin-right: 1.5vw;
+}
+
+.navLink {
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 110%;
+    color: var(--disabled);
+    transition: color ease-in-out 0.3s;
+}
+.navLink:hover {
+    color: var(--ico);
+}
+.active {
+    color: var(--ico);
+}

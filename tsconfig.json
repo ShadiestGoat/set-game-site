@@ -54,8 +54,7 @@
 
         /* Advanced Options */
         "skipLibCheck": true,                      /* Skip type checking of declaration files. */
-        "allowUnusedLabels": false,
-
+        "allowUnusedLabels": false
     },
-    "include": ["src/**/*", "tests/**/*", "../tailwind.config.js", "craco.config.js"]
+    "include": ["src/**/*", "tests/**/*"]
 }

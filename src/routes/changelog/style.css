@@ -1,0 +1,36 @@
+.changesWrapper {
+    list-style: none;
+    width: 80vw;
+    margin-top: 7vh;
+}
+
+.changeWrapper {
+    width: 93%;
+    padding-right: 10%;
+    margin-top: 5%;
+}
+
+.changeVersion {
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: solid white;
+    text-align: left;
+    margin-bottom: 4%;
+}
+
+.subTitle {
+    margin-top: 1.5%;
+    text-align: left;
+    margin-left: 5px;
+    margin-bottom: 0.6%;
+}
+
+.changesItem {
+    text-align: left;
+    margin-top: 0.2%;
+    margin-left: calc(3% + 10px);
+    color: var(--ico);
+    font-size: 16px;
+    font-weight: normal;
+}

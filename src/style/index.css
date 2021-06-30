@@ -1,7 +1,3 @@
-/*
-    theft from gray shift? Potentially.
-*/
-
 :root {
    --ico: rgb(255, 255, 255);
    --secondary: #2d2d2d;
@@ -9,72 +5,11 @@
    --main: #202124;
    background-color: var(--main);
 }
-
-.game-container {
-    display: grid;
-    margin-top: 1% !important;
-}
-
-.boardGameWrapper {
-    display: inline-flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-}
-
-.extra-col {
-    flex: 0 0 auto;
-    width: 15%;
-    margin-right: 3%;
-}
-
-.gameBoard {
-    flex: 0 0 auto;
-    width: 60%;
-    display: flex;
-    flex-direction: column;
-    min-width: 500px;
-    min-height: 452px;
-    max-height: 100vh;
-    max-width: 100vw;
-}
-
-.gameBoard > div {
-    margin-top: 4px;
-    display: inline-flex;
-    flex-direction: row;
-}
-
-.game-card > svg {
-    display: flex;
-    width: 80%;
-    max-height: 98%;
-}
-
-.game-card {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* cursor: pointer; hahahaha no.*/
-    border-radius: 6px;
-    width: 11vw;
-    height: 31vh;
-    min-width: 80px;
-    min-height: 100px;
-    /* todo remake proportions,
-        also set it to keep them during rescaling
-    */
-    justify-content: center;
-    overflow-y: hidden;
-    background: var(--ico);
-    transition: box-shadow 0.15s ease-in-out;
-}
-
 .scontainer {
     width: 100%;
     padding-right: 1rem;
     padding-left: 1rem;
 }
-
 .btn {
     display: inline-block;
     padding: 0.75rem var(--spacer-4);
@@ -92,31 +27,23 @@
     color: var(--ico);
     padding: 1rem 2rem;
     font-weight: 500 !important;
-    cursor:pointer;
+    cursor: pointer;
 }
 
 .btn:focus {
     outline: 0;
 }
-
-
-
-/* OwO Thefty wefty */
 @media (prefers-reduced-motion: reduce) {
     .btn {
       transition: none;
     }
 }
-
-
 .btn-d {
     background-color: #d42738;
 }
-
 .text-danger {
     color: #d42738 !important
 }
-
 .btn-d.active,
 .btn-d.show,
 .btn-d:active,
@@ -181,6 +108,14 @@ button {
     margin-right: auto;
 }
 
+
+::-webkit-scrollbar {
+    width: 0px;
+}
+
+
+/* After this line, all the css can be split into further files */
+
 .extra-col > button {
     width: 100%;
     margin-top: 3vh;
@@ -200,7 +135,6 @@ button {
     padding: 15px;
     color: var(--ico);
     font-family: "monospace";
-
 }
 
 .timer-row {
@@ -256,99 +190,63 @@ button {
     height: 97vh;
 }
 
-.navbar-wrapper {
-    display: flex;
-    background-color: var(--secondary);
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 2vh;
-    padding-bottom: 2vh;
+
+
+
+.game-container {
+    display: grid;
+    margin-top: 1% !important;
 }
 
-.navbar {
-    list-style: none;
-    display: flex;
+.boardGameWrapper {
+    display: inline-flex;
+    flex-wrap: wrap;
     flex-direction: row;
 }
 
-.nav-item {
-    margin-right: 3vw;
+.extra-col {
+    flex: 0 0 auto;
+    width: 15%;
+    margin-right: 3%;
 }
 
-.navbar-item-1 {
-    margin-left: 1.5vw;
+.gameBoard {
+    flex: 0 0 auto;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    min-width: 500px;
+    min-height: 452px;
+    max-height: 100vh;
+    max-width: 100vw;
 }
 
-.navbar-item-last {
-    margin-right: 1.5vw;
+.gameBoard > div {
+    margin-top: 4px;
+    display: inline-flex;
+    flex-direction: row;
 }
 
-.nav-link {
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 110%;
-    color: var(--disabled);
-    transition: color ease-in-out 0.3s;
+.game-card > svg {
+    display: flex;
+    width: 80%;
+    max-height: 98%;
 }
-.nav-link:hover {
-    color: var(--ico);
+.game-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* cursor: pointer; hahahaha no.*/
+    border-radius: 6px;
+    width: 11vw;
+    height: 31vh;
+    min-width: 80px;
+    min-height: 100px;
+    /* todo remake proportions,
+        also set it to keep them during rescaling
+    */
+    justify-content: center;
+    overflow-y: hidden;
+    background: var(--ico);
+    transition: box-shadow 0.15s linear;
 }
-.active {
-    color: var(--ico);
-}
-
-
-.fadeIn {
-    animation: fadeIn linear 0.7s;
-    -webkit-animation: fadeIn linear 0.7s;
-    -moz-animation: fadeIn linear 0.7s;
-    -o-animation: fadeIn linear 0.7s;
-    -ms-animation: fadeIn linear 0.7s;
-}
-
-.particles-bg-canvas-self {
-    animation: fadeIn linear 3s;
-    -webkit-animation: fadeIn linear 3s;
-    -moz-animation: fadeIn linear 3s;
-    -o-animation: fadeIn linear 3s;
-    -ms-animation: fadeIn linear 3s;
-}
-
-::-webkit-scrollbar {
-    width: 0px;
-}
-
-
-
-
-
-
-
-/* keyframes */
-
-
-@keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
-    }
-
-    @-moz-keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
-    }
-
-    @-webkit-keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
-    }
-
-    @-o-keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
-    }
-
-    @-ms-keyframes fadeIn {
-        0% {opacity:0;}
-        100% {opacity:1;}
-    }
-
