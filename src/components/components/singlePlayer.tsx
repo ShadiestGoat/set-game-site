@@ -1,5 +1,5 @@
 import { h, FunctionComponent } from "preact"
-import { useCallback, useEffect, useRef, useState } from "preact/hooks"
+import { useCallback, useMemo, useState } from "preact/hooks"
 import { isMobileOnly } from "react-device-detect"
 import { Helmet } from "@notwoods/preact-helmet"
 import { Link } from 'preact-router/match';
@@ -40,7 +40,6 @@ type fakeState = {
         oldDClock: "H,T" | "H,F" | "NH"
         timerMode: "Expert" | "Beginner"
     }
-    boardCache: JSX.Element,
 }
 
 function findNeededCard(card1:setCard, card2:setCard):(setCard | false) {
@@ -113,58 +112,57 @@ function addRow(board:setCard[], deck:setCard[], cols:number): {deck: setCard[],
 }
 
 
-const SingleGame: FunctionComponent = ({}) => {
-    const initer:() => fakeState = () => {
-        let curDeck:setCard[] = []
-        for (const i of FullDeck) {
-            curDeck.push(i)
-        }
-        let board:setCard[] = []
-        let cols = 4
-        for (let i = 0; i < 12; i++) {
-            const index = rand(0, curDeck.length - 1)
-            board.push(curDeck[index])
-            curDeck.splice(index, 1)
-        }
-        while (!findSet(board)) {
-            const NewBoardData = addRow(board, curDeck, cols)
-            curDeck = NewBoardData.deck
-            board = NewBoardData.board
-            cols = NewBoardData.cols
-        }
-
-        return {
-            gameInfo: {
-                deck: curDeck,
-                board,
-                cols,
-                hints: 0,
-                selectedCards: [],
-                setsFound: [],
-                won: false,
-                wrongs: 0
-            },
-            speedrun: {
-                timeStarted: new Date(),
-                timeFin: false,
-                oldDClock: "NH",
-                splits: {
-                    BeginnerSplits: (speedrunInfo ?? {splits: {BeginnerSplits: splitsB}}).splits.BeginnerSplits,
-                    ExpertSplits: (speedrunInfo ?? {splits: {ExpertSplits: splitsE}}).splits.ExpertSplits,
-                    CurSplitName: splitsB[0].name,
-                    doneSplits: {},
-                    splitTimeS: Date.now()
-                },
-                displayClock: (speedrunInfo ?? {displayClock: true}).displayClock,
-                timerMode: (speedrunInfo ?? {timerMode: "Beginner"}).timerMode,
-            },
-            boardCache: <GameBoard selectF={handleSetSelector} cols={cols} rawBoard={board} selectedCards={[]} />
-        } as fakeState
+const initer:() => fakeState = () => {
+    let curDeck:setCard[] = []
+    for (const i of FullDeck) {
+        curDeck.push(i)
     }
-    const initialInfo = initer()
+    let board:setCard[] = []
+    let cols = 4
+    for (let i = 0; i < 12; i++) {
+        const index = rand(0, curDeck.length - 1)
+        board.push(curDeck[index])
+        curDeck.splice(index, 1)
+    }
+    while (!findSet(board)) {
+        const NewBoardData = addRow(board, curDeck, cols)
+        curDeck = NewBoardData.deck
+        board = NewBoardData.board
+        cols = NewBoardData.cols
+    }
+
+    return {
+        gameInfo: {
+            deck: curDeck,
+            board,
+            cols,
+            hints: 0,
+            selectedCards: [],
+            setsFound: [],
+            won: false,
+            wrongs: 0
+        },
+        speedrun: {
+            timeStarted: new Date(),
+            timeFin: false,
+            oldDClock: "NH",
+            splits: {
+                BeginnerSplits: splitsB,
+                ExpertSplits: splitsE,
+                CurSplitName: splitsB[0].name,
+                doneSplits: {},
+                splitTimeS: Date.now()
+            },
+            displayClock: true,
+            timerMode: "Beginner",
+        },
+    }
+}
+const SingleGame: FunctionComponent = ({}) => {
+    const initialInfo = useMemo(initer, [])
     const [gameInfo, setGameInfo] = useState<fakeState['gameInfo']>(initialInfo.gameInfo)
     const [speedrunInfo, setSpeedrunInfo] = useState<fakeState['speedrun']>(initialInfo.speedrun)
-    const [boardCache, setBoardCache] = useState<fakeState['boardCache']>(initialInfo.boardCache)
+    const [boardCache, setBoardCache] = useState<JSX.Element>(<GameBoard selectF={handleSetSelector} cols={initialInfo.gameInfo.cols} rawBoard={initialInfo.gameInfo.board} selectedCards={[]} />)
     const win = useCallback(() => {
         const time = new Date()
         const totTime = speedrunInfo.timeStarted.getTime() - time.getTime()
@@ -266,12 +264,18 @@ const SingleGame: FunctionComponent = ({}) => {
                 nGame.selectedCards = []
             }
         }
-        setGameInfo(nGame)
-        setSpeedrunInfo(nSpeedrun)
+        setGameInfo({...nGame})
+        setSpeedrunInfo({...nSpeedrun})
         setBoardCache(<GameBoard rawBoard={nGame.board} selectF={handleSetSelector} cols={nGame.cols} selectedCards={nGame.selectedCards} />)
     }, [gameInfo, speedrunInfo, win])
 
-    const initerCB:()=>fakeState = useCallback(initer,[handleSetSelector, speedrunInfo])
+    const initerCB = useCallback(() => {
+        const stuff = initer()
+        setGameInfo(stuff.gameInfo)
+        setSpeedrunInfo(stuff.speedrun)
+        setBoardCache(<GameBoard selectF={handleSetSelector} cols={stuff.gameInfo.cols} rawBoard={stuff.gameInfo.board} selectedCards={[]} />)
+        return stuff
+    },[handleSetSelector])
 
     useGlobalListener('keydown', (e) => {
         if (e.key == 'r' && !e.ctrlKey) {
@@ -279,7 +283,7 @@ const SingleGame: FunctionComponent = ({}) => {
             const stuff = initer()
             setGameInfo(stuff.gameInfo)
             setSpeedrunInfo(stuff.speedrun)
-            setBoardCache(stuff.boardCache)
+            setBoardCache(<GameBoard selectF={handleSetSelector} cols={initialInfo.gameInfo.cols} rawBoard={initialInfo.gameInfo.board} selectedCards={[]} />)
 
         } else if (Object.keys(keyMap).includes(e.key.toLowerCase())) {
             const item = keyMap[e.key.toLocaleLowerCase()]
@@ -335,7 +339,7 @@ const SingleGame: FunctionComponent = ({}) => {
                         if (e.button == 0) {
                             const info = initerCB()
                             setGameInfo(info.gameInfo)
-                            setBoardCache(info.boardCache)
+                            setBoardCache(<GameBoard selectF={handleSetSelector} cols={initialInfo.gameInfo.cols} rawBoard={initialInfo.gameInfo.board} selectedCards={[]} />)
                             setSpeedrunInfo(info.speedrun)
                         }
                     }} title="Restart the game (r)" >Restart</button>
