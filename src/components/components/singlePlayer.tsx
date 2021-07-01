@@ -162,7 +162,6 @@ const SingleGame: FunctionComponent = ({}) => {
     const initialInfo = useMemo(initer, [])
     const [gameInfo, setGameInfo] = useState<fakeState['gameInfo']>(initialInfo.gameInfo)
     const [speedrunInfo, setSpeedrunInfo] = useState<fakeState['speedrun']>(initialInfo.speedrun)
-    const [boardCache, setBoardCache] = useState<JSX.Element>(<GameBoard selectF={handleSetSelector} cols={initialInfo.gameInfo.cols} rawBoard={initialInfo.gameInfo.board} selectedCards={[]} />)
     const win = useCallback(() => {
         const time = new Date()
         const totTime = speedrunInfo.timeStarted.getTime() - time.getTime()
@@ -266,25 +265,20 @@ const SingleGame: FunctionComponent = ({}) => {
         }
         setGameInfo({...nGame})
         setSpeedrunInfo({...nSpeedrun})
-        setBoardCache(<GameBoard rawBoard={nGame.board} selectF={handleSetSelector} cols={nGame.cols} selectedCards={nGame.selectedCards} />)
     }, [gameInfo, speedrunInfo, win])
 
     const initerCB = useCallback(() => {
         const stuff = initer()
         setGameInfo(stuff.gameInfo)
         setSpeedrunInfo(stuff.speedrun)
-        setBoardCache(<GameBoard selectF={handleSetSelector} cols={stuff.gameInfo.cols} rawBoard={stuff.gameInfo.board} selectedCards={[]} />)
         return stuff
-    },[handleSetSelector])
+    }, [])
 
     useGlobalListener('keydown', (e) => {
         if (e.key == 'r' && !e.ctrlKey) {
-
             const stuff = initer()
             setGameInfo(stuff.gameInfo)
             setSpeedrunInfo(stuff.speedrun)
-            setBoardCache(<GameBoard selectF={handleSetSelector} cols={initialInfo.gameInfo.cols} rawBoard={initialInfo.gameInfo.board} selectedCards={[]} />)
-
         } else if (Object.keys(keyMap).includes(e.key.toLowerCase())) {
             const item = keyMap[e.key.toLocaleLowerCase()]
             const card = gameInfo.board[item[0] * gameInfo.cols + item[1]]
@@ -339,7 +333,6 @@ const SingleGame: FunctionComponent = ({}) => {
                         if (e.button == 0) {
                             const info = initerCB()
                             setGameInfo(info.gameInfo)
-                            setBoardCache(<GameBoard selectF={handleSetSelector} cols={initialInfo.gameInfo.cols} rawBoard={initialInfo.gameInfo.board} selectedCards={[]} />)
                             setSpeedrunInfo(info.speedrun)
                         }
                     }} title="Restart the game (r)" >Restart</button>
@@ -354,7 +347,6 @@ const SingleGame: FunctionComponent = ({}) => {
                             nGame.hints++
                             nGame.selectedCards = sel
                             setGameInfo(nGame)
-                            setBoardCache(<GameBoard selectF={handleSetSelector} rawBoard={nGame.board} cols={nGame.cols} selectedCards={nGame.selectedCards} />)
                         }
                     }} title="Hint (for weaklings)">Hint</button>
                     <button class="btn btn-p" onClick={(e) => {if (e.button != 0) return;
@@ -372,8 +364,7 @@ const SingleGame: FunctionComponent = ({}) => {
                     </Link>
                     </div>
                     <div class="gameBoard">
-                    {boardCache}
-                    </div>
+                    <GameBoard selectF={handleSetSelector} cols={gameInfo.cols} rawBoard={gameInfo.board} selectedCards={gameInfo.selectedCards} />                    </div>
                     {
                         speedrunInfo.displayClock ?
                         <LiveSplit
