@@ -1,5 +1,5 @@
 import { h, FunctionComponent } from "preact";
-import { colorMap } from "../components/gameHelper";
+import { colorMap } from "../gameHelper";
 
 const width = '2'
 const height = '1'

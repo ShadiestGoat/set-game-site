@@ -4,10 +4,14 @@ import { isMobileOnly } from "react-device-detect"
 import { Helmet } from "@notwoods/preact-helmet"
 import { Link } from 'preact-router/match';
 import { rand, timeFormat, useGlobalListener } from "../../tools"
-import { SvgDefs } from "../cards/svgDefs"
-import GameBoard from "./game"
-import { FullDeck, keyMap, setCard, Split, splitsB, splitsE } from "./gameHelper"
-import { LiveSplit } from "./Livesplit"
+import { SvgDefs } from "../../components/cards/svgDefs"
+import GameBoard from "../../components/gameBoard"
+import { FullDeck, keyMap, setCard, Split, splitsB, splitsE } from "../../components/gameHelper"
+import LiveSplit from "../../components/livesplit"
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
+// import generalStyle from "../../style/index.css"
+import style from "./style.css"
 
 type fakeState = {
     gameInfo: {
@@ -28,8 +32,11 @@ type fakeState = {
             CurSplitName: string,
             BeginnerSplits: Split[],
             ExpertSplits: Split[],
-            splitTimeS: number
         },
+        oldSplits: {
+            doneSplits: {[key:string]:number}
+            splits: Split[],
+        } | false
         displayClock: boolean,
         /**
          * for if col > 5
@@ -112,76 +119,91 @@ function addRow(board:setCard[], deck:setCard[], cols:number): {deck: setCard[],
 }
 
 
-const initer:() => fakeState = () => {
-    let curDeck:setCard[] = []
-    for (const i of FullDeck) {
-        curDeck.push(i)
-    }
-    let board:setCard[] = []
-    let cols = 4
-    for (let i = 0; i < 12; i++) {
-        const index = rand(0, curDeck.length - 1)
-        board.push(curDeck[index])
-        curDeck.splice(index, 1)
-    }
-    while (!findSet(board)) {
-        const NewBoardData = addRow(board, curDeck, cols)
-        curDeck = NewBoardData.deck
-        board = NewBoardData.board
-        cols = NewBoardData.cols
-    }
 
-    return {
-        gameInfo: {
-            deck: curDeck,
-            board,
-            cols,
-            hints: 0,
-            selectedCards: [],
-            setsFound: [],
-            won: false,
-            wrongs: 0
-        },
-        speedrun: {
-            timeStarted: new Date(),
-            timeFin: false,
-            oldDClock: "NH",
-            splits: {
-                BeginnerSplits: splitsB,
-                ExpertSplits: splitsE,
-                CurSplitName: splitsB[0].name,
-                doneSplits: {},
-                splitTimeS: Date.now()
-            },
-            displayClock: true,
-            timerMode: "Beginner",
-        },
-    }
-}
 const SingleGame: FunctionComponent = ({}) => {
+    const initer:() => fakeState = () => {
+        let curDeck:setCard[] = []
+        for (const i of FullDeck) {
+            curDeck.push(i)
+        }
+        let board:setCard[] = []
+        let cols = 4
+        for (let i = 0; i < 12; i++) {
+            const index = rand(0, curDeck.length - 1)
+            board.push(curDeck[index])
+            curDeck.splice(index, 1)
+        }
+        while (!findSet(board)) {
+            const NewBoardData = addRow(board, curDeck, cols)
+            curDeck = NewBoardData.deck
+            board = NewBoardData.board
+            cols = NewBoardData.cols
+        }
+
+        return {
+            gameInfo: {
+                deck: curDeck,
+                board,
+                cols,
+                hints: 0,
+                selectedCards: [],
+                setsFound: [],
+                won: false,
+                wrongs: 0
+            },
+            speedrun: {
+                timeStarted: new Date(),
+                timeFin: false,
+                oldDClock: "NH",
+                splits: {
+                    BeginnerSplits: cookies.get('BeginnerSplits') ?? splitsB,
+                    ExpertSplits: cookies.get('ExpertSplits') ?? splitsE,
+                    CurSplitName: splitsB[0].name,
+                    doneSplits: {}
+                },
+                oldSplits: false,
+                displayClock: (cookies.get('displayClock') ?? "true") == 'true',
+                timerMode: cookies.get('timerMode') ?? "Beginner",
+            },
+        }
+    }
     const initialInfo = useMemo(initer, [])
     const [gameInfo, setGameInfo] = useState<fakeState['gameInfo']>(initialInfo.gameInfo)
     const [speedrunInfo, setSpeedrunInfo] = useState<fakeState['speedrun']>(initialInfo.speedrun)
     const win = useCallback(() => {
         const time = new Date()
-        const totTime = speedrunInfo.timeStarted.getTime() - time.getTime()
+        const totTime = time.getTime() - speedrunInfo.timeStarted.getTime()
         const timeTot = new Date(totTime)
+        const nGame = gameInfo
+        const nSpeedrun = speedrunInfo
         console.log(gameInfo.hints ? "Hints were used" : timeFormat(timeTot, true))
         const splits = speedrunInfo.splits
-        splits.doneSplits["Game finished"] = time.getTime() - splits.splitTimeS
+        splits.doneSplits["Game finished"] = timeTot.getTime()
         console.log(splits.doneSplits)
-        gameInfo.won = true
-        if (gameInfo.hints) {
-            splits[`${speedrunInfo.timerMode}Splits` as "BeginnerSplits" | "ExpertSplits"] = splits[`${speedrunInfo.timerMode}Splits` as "BeginnerSplits" | "ExpertSplits"].map((val: Split) => {
+        nGame.won = true
+        if (!gameInfo.hints) {
+            const mode = `${speedrunInfo.timerMode}Splits` as "BeginnerSplits" | "ExpertSplits"
+            nSpeedrun.oldSplits = {
+                splits: splits[mode],
+                doneSplits: splits.doneSplits
+            }
+            splits[mode] = splits[mode].map((val: Split) => {
                 return {
                     fin: val.fin,
                     name: val.name,
-                    best: splits.doneSplits[val.name] > val.best ? splits.doneSplits[val.name] : val.best,
+                    best: splits.doneSplits[val.name] < val.best ? splits.doneSplits[val.name] : val.best,
                 }
             })
         }
         splits.doneSplits = {}
+        nSpeedrun.splits = splits
+        cookies.set('BeginnerSplits', splits.BeginnerSplits)
+        cookies.set('ExpertSplits', splits.ExpertSplits)
+
+        setGameInfo({...nGame})
+        setSpeedrunInfo({...nSpeedrun})
     }, [gameInfo, speedrunInfo])
+
     const handleSetSelector = useCallback((card:setCard) => {
         const nSpeedrun = speedrunInfo
         const nGame = gameInfo
@@ -226,12 +248,13 @@ const SingleGame: FunctionComponent = ({}) => {
                     const nextS:Split = neededSplits[indexx + 1]
                     if (nextS) {
                         // if there is a next split
-                        nSpeedrun.splits.doneSplits[nSpeedrun.splits.CurSplitName] = Date.now() - nSpeedrun.splits.splitTimeS
-                        console.log(nSpeedrun.splits.doneSplits[nSpeedrun.splits.CurSplitName] = Date.now() - nSpeedrun.splits.splitTimeS)
-                        nSpeedrun.splits.splitTimeS = Date.now()
+                        nSpeedrun.splits.doneSplits[nSpeedrun.splits.CurSplitName] = Date.now() - nSpeedrun.timeStarted.getTime()
+                        console.log(nSpeedrun.splits.doneSplits[nSpeedrun.splits.CurSplitName] = Date.now() - nSpeedrun.timeStarted.getTime())
                         nSpeedrun.splits.CurSplitName = nextS.name
                     }
                 }
+                // filter out the undefined
+                nGame.board = nGame.board.filter((val) => val)
 
                 //end game logic
                 if (nGame.deck.length == 0) {
@@ -240,7 +263,6 @@ const SingleGame: FunctionComponent = ({}) => {
                         win()
                         return
                     }
-                    nGame.board = nGame.board.filter((val) => val)
                     if (nGame.board.length < 12) nGame.cols--
 
                 } else if (!findSet(nGame.board)) {
@@ -287,8 +309,8 @@ const SingleGame: FunctionComponent = ({}) => {
     })
 
     return (
-        <div class="scontainer game-container"
-        ><SvgDefs />
+        <div class={style.gameContainer}>
+        <SvgDefs />
         <Helmet>
             <meta content="The set game, recreated by Shady Goat" property="og:title" />
             <meta content="This is the fun card game 'SET', but recreated as a website made with preact. " property="og:description" />
@@ -298,84 +320,90 @@ const SingleGame: FunctionComponent = ({}) => {
     {
         isMobileOnly ? "Sorry, but mobile is currently not supported!" :
                 gameInfo.won ?
-                    <div class="win-s">
-                        <div class="w-col">
+                    <div class={style.winS}>
+                        <div class={style.wCol}>
                             <div style={{display: "flex", flexDirection: "column"}}>
                                 <h1>You did it! Congrats!</h1>
                                 <h1>Hints used: {gameInfo.hints}</h1>
                                 <h1>Wrong guesses: {gameInfo.wrongs}</h1>
                             </div>
                         </div>
-                        <div class="w-col-2">
-                            {
-                                Object.keys(speedrunInfo.splits.doneSplits).map((name) => {
-                                    const time = speedrunInfo.splits.doneSplits[name]
-                                    return (
-                                        <div key={name} class="w-row">
-                                            <div class="w-r-col" style={{width:"40%", textAlign: "left"}}>{timeFormat(time, true)}</div>
-                                            <div class="w-r-col" style={{width:"60%", textAlign: "right"}}>{timeFormat(time, true)}</div>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
-                    </div>
-                : <div class="boardGameWrapper">
-                    <div class="extra-col">
-                    <h1 style={{color:"white", textAlign:"center", verticalAlign:"middle"}}>
-                        Set!
-                    </h1>
-                    <p class="text-awhite">Found sets: {gameInfo.setsFound.length}</p>
-                    <p class="text-awhite">Wrong Guesses: {gameInfo.wrongs}</p>
-                    <p class="text-awhite">Deck: {gameInfo.deck.length}</p>
-                    <p class={`${gameInfo.hints ? 'text-danger' : 'text-awhite'}`}>Hints used: {gameInfo.hints}</p>
-                    <button class="btn btn-d" onClick={(e) => {
-                        if (e.button == 0) {
-                            const info = initerCB()
-                            setGameInfo(info.gameInfo)
-                            setSpeedrunInfo(info.speedrun)
-                        }
-                    }} title="Restart the game (r)" >Restart</button>
-                    <button class="btn btn-p" onClick={(e) => {
-                        if (e.button == 0) {
-                            console.log("A hint was used!")
-                            const adr = findSet(gameInfo.board)
-                            if (!adr) {console.error('No sets found'); return}
-                            let sel:setCard[] = []
-                            sel = [gameInfo.board[adr[0]], gameInfo.board[adr[1]]]
-                            const nGame = gameInfo
-                            nGame.hints++
-                            nGame.selectedCards = sel
-                            setGameInfo(nGame)
-                        }
-                    }} title="Hint (for weaklings)">Hint</button>
-                    <button class="btn btn-p" onClick={(e) => {if (e.button != 0) return;
-                        const nSpeedrun = speedrunInfo
-                        nSpeedrun.displayClock = !nSpeedrun.displayClock
-                        setSpeedrunInfo(nSpeedrun)
-                        }}>Toggle Clock</button>
-                    <button class="btn btn-p" onClick={(e) => {if (e.button != 0) return;
-                        const nSpeedrun = speedrunInfo
-                        nSpeedrun.timerMode == "Beginner" ? "Expert" : "Beginner"
-                        setSpeedrunInfo(nSpeedrun)
-                    }}>Change Type</button>
-                    <Link href="/" class="btn btn-d" style={{textDecoration: "none", borderRadius: "50%", padding: '0px', width: "6vw", height: "6vw", display: "flex", alignItems: "center", justifyContent: "center", margin: "auto auto", marginTop: "4vh"}}>
-                        Home
-                    </Link>
-                    </div>
-                    <div class="gameBoard">
-                    <GameBoard selectF={handleSetSelector} cols={gameInfo.cols} rawBoard={gameInfo.board} selectedCards={gameInfo.selectedCards} />                    </div>
-                    {
-                        speedrunInfo.displayClock ?
+                        {speedrunInfo.oldSplits ?
                         <LiveSplit
-                            curSplitTime={speedrunInfo.splits.splitTimeS}
-                            splitName={speedrunInfo.splits.CurSplitName}
-                            splits={speedrunInfo.splits[`${speedrunInfo.timerMode}Splits` as 'ExpertSplits' | "BeginnerSplits"]}
-                            totTime={speedrunInfo.timeStarted.getTime()}
-                            done={speedrunInfo.splits.doneSplits}
-                        />
-                        : <div />
-                    }
+                            splitName={"donzo"}
+                            splits={speedrunInfo.oldSplits.splits}
+                            totTime={0}
+                            done={speedrunInfo.oldSplits.doneSplits}
+                        /> : <h1 style={{transform:"rotate(300deg) translate(-40px, 400px) scale(1.75)"}}>You used hints :(</h1>
+                        }
+
+                    </div>
+                : <div class={style.boardGameWrapper}>
+                        <div class={style.extraCol}>
+                            <h1>Set!</h1>
+                            <p>Found sets: {gameInfo.setsFound.length}</p>
+                            <p>Wrong Guesses: {gameInfo.wrongs}</p>
+                            <p>Deck: {gameInfo.deck.length}</p>
+                            <p class={`${gameInfo.hints ? 'text-danger' : ''}`}>Hints used: {gameInfo.hints}</p>
+                            <button class={`btn btn-d`} onClick={(e) => {
+                                if (e.button == 0) {
+                                    const info = initerCB()
+                                    setGameInfo(info.gameInfo)
+                                    setSpeedrunInfo(info.speedrun)
+                                }
+                            }} title="Restart the game (r)" >Restart</button>
+                            <button class="btn btn-p" onClick={(e) => {
+                                if (e.button == 0) {
+                                    const CHEATER_MODE = false
+
+                                    if (CHEATER_MODE) {
+                                        const adr = findSet(gameInfo.board)
+                                        if (!adr) {console.error('No sets found'); return}
+                                        handleSetSelector(gameInfo.board[adr[0]])
+                                        handleSetSelector(gameInfo.board[adr[1]])
+                                        handleSetSelector(gameInfo.board[adr[2]])
+                                    } else {
+                                        console.log("A hint was used!")
+                                        const adr = findSet(gameInfo.board)
+                                        if (!adr) {console.error('No sets found'); return}
+                                        let sel:setCard[] = []
+                                        sel = [gameInfo.board[adr[0]], gameInfo.board[adr[1]],]
+                                        const nGame = gameInfo
+                                        nGame.hints++
+                                        nGame.selectedCards = sel
+                                        setGameInfo({...nGame})
+                                    }
+                                }
+                            }} title="Hint (for weaklings)">Hint</button>
+                            <button class="btn btn-p" onClick={(e) => {if (e.button != 0) return;
+                                const nSpeedrun = speedrunInfo
+                                nSpeedrun.displayClock = !nSpeedrun.displayClock
+                                setSpeedrunInfo({...nSpeedrun})
+                                cookies.set('displayClock', nSpeedrun.displayClock, { path: '/s', });
+                                }}>Toggle Clock</button>
+                            <button class="btn btn-p" onClick={(e) => {if (e.button != 0) return;
+                                const nSpeedrun = speedrunInfo
+                                nSpeedrun.timerMode = nSpeedrun.timerMode == "Beginner" ? "Expert" : "Beginner"
+                                cookies.set('timerMode', nSpeedrun.timerMode, { path: '/s', });
+                                setSpeedrunInfo({...nSpeedrun})
+                            }}>Change Type</button>
+                            <Link href="/" class="btn btn-d" style={{textDecoration: "none", borderRadius: "50%", padding: '0px', width: "6vw", height: "6vw", display: "flex", alignItems: "center", justifyContent: "center", margin: "auto auto", marginTop: "4vh"}}>
+                                Home
+                            </Link>
+                        </div>
+                        <div class={style.gameBoard}>
+                            <GameBoard selectF={handleSetSelector} cols={gameInfo.cols} rawBoard={gameInfo.board} selectedCards={gameInfo.selectedCards} />
+                        </div>
+                        {
+                            speedrunInfo.displayClock ?
+                            <LiveSplit
+                                splitName={speedrunInfo.splits.CurSplitName}
+                                splits={speedrunInfo.splits[`${speedrunInfo.timerMode}Splits` as 'ExpertSplits' | "BeginnerSplits"]}
+                                totTime={speedrunInfo.timeStarted.getTime()}
+                                done={speedrunInfo.splits.doneSplits}
+                            />
+                            : <div />
+                        }
                 </div>
             }
             </div>

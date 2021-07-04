@@ -1,0 +1,44 @@
+.timerWrapper {
+    flex: 0 0 auto;
+    width: 22%;
+    min-width: 245px;
+    display: inline-flex;
+    flex-direction: column;
+    border: 3px solid darkgrey;
+    padding: 15px;
+    color: var(--ico);
+    font-family: "monospace";
+}
+
+.timerRow {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 15px;
+    border-bottom: 2px dashed darkgrey;
+    padding-bottom: 7px;
+}
+
+.timerHeading {
+    font-family: cursive;
+    font-weight: bolder;
+    border-bottom: 3px solid darkgrey;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.timerTName {
+    flex: 0 0 auto;
+    width: 28%;
+}
+
+.timerTTime {
+    flex: 0 0 auto;
+    width: 38%;
+    text-align: right;
+}
+
+.timerTBest {
+    flex: 0 0 auto;
+    width: 37%;
+    text-align: right;
+}

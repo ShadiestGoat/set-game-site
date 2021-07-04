@@ -1,5 +1,6 @@
 import { FunctionComponent, h } from "preact"
-import { colorMap, setCard } from "../components/gameHelper"
+import { colorMap, setCard } from "../gameHelper"
+import style from "./style.css"
 
 const stroke = "3.5"
 function fillGen(type: string, color: string) {
@@ -166,16 +167,10 @@ const Rhombus: FunctionComponent<{card: setCard}> = ({ card }) => {
         </g>
     )
 }
-export const SetCardGen: FunctionComponent<{card: setCard}> = ({card}) => (<svg
-    xmlns="http://www.w3.org/2000/svg"
-    xmlnsXlink="http://www.w3.org/1999/xlink"
-    viewBox="0 0 210 300">
-    {
-        card[1] == 'o' ?
-        <Oval card={card} />
-        : card[1] == 'r' ?
-        <Rhombus card={card} />
-        :
-        <Squigly card={card} />
-    }
-</svg>)
+const SetCardGen: FunctionComponent<{card: setCard, selected: boolean, onClick:(e:h.JSX.TargetedMouseEvent<HTMLDivElement>) => void}> = ({card, selected, onClick}) => (
+    <div class={`${style.gameCard} ${selected ? style.cardSelected : ''}`} id={card} onClick={onClick}>
+    <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 210 300">{card[1] == 'o' ? <Oval card={card} /> : card[1] == 'r' ? <Rhombus card={card} /> : <Squigly card={card} />}</svg>
+    </div>
+)
+
+export default SetCardGen

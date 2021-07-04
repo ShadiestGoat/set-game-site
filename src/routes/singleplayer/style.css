@@ -1,0 +1,54 @@
+.extraCol > button {
+    width: 100%;
+    margin-top: 3vh;
+}
+.extraCol {
+    flex: 0 0 auto;
+    width: 15%;
+    margin-right: 3%;
+}
+
+.wCol {
+    flex: 0 0 auto;
+    width: 67%;
+    text-align: left;
+    justify-content: center;
+}
+
+.winS {
+    display: flex;
+    height: 97vh;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.gameContainer {
+    display: grid;
+    margin-top: 1% !important;
+    width: 100%;
+    padding-right: 1rem;
+    padding-left: 1rem;
+}
+
+.boardGameWrapper {
+    display: inline-flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.gameBoard {
+    flex: 0 0 auto;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    min-width: 500px;
+    min-height: 452px;
+    max-height: 100vh;
+    max-width: 100vw;
+}
+
+.gameBoard > div {
+    margin-top: 4px;
+    display: inline-flex;
+    flex-direction: row;
+}

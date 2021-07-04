@@ -156,13 +156,16 @@ export default [
         added: [
             'An Index page',
             'A changelog page',
-            'added preact/debug to the index, so now you can use the debug extension for preact ^^'
+            'added preact/debug to the index, so now you can use the debug extension for preact ^^',
+            'Now the the game should be able to remember your speedrun preferences & feets (through cookies)'
         ],
         changed: [
             'The help page is a seperate page, no more mid game help :>',
             "Some vulnerabilities fixed (npm audit fix)",
             "The project structure is now more organised",
-            "Most of the css has been split apart into different files"
+            "Most of the css has been split apart into different files (which means that only the css that is needed is loaded)",
+            "All components are now function components",
+            "The cards now don't have a card-wrapper div surrounding them"
         ],
         fixed: [
             'Now almost all the code is more up to spec according to eslint ^^',

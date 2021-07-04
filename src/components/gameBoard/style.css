@@ -1,0 +1,17 @@
+
+.gameBoard {
+    flex: 0 0 auto;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    min-width: 500px;
+    min-height: 452px;
+    max-height: 100vh;
+    max-width: 100vw;
+}
+
+.gameBoard > div {
+    margin-top: 4px;
+    display: inline-flex;
+    flex-direction: row;
+}
