@@ -1,16 +1,13 @@
-import { isSafari } from "react-device-detect"
 import { useRef, useEffect, useCallback } from 'preact/hooks';
 
 export function rand(min: number, max: number): number {
     return Math.floor(Math.random()*(max-min+1)+min)
 }
-export function timeFormat(time: Date | number, ms = true) {
-    if (typeof time == "number") time = new Date(isSafari ? time + 60 * 60 * 1000 : time)
-    else if (isSafari) time = new Date(time.getTime() + 60 * 60 * 1000)
-
+export function timeFormat(time: number, ms = true) {
+    const t = new Date(time)
     let mss = ""
     if (ms) {
-        const _mss = time.getMilliseconds()
+        const _mss = t.getUTCMilliseconds()
         switch(_mss.toString().length.toString()) {
             case "1":
                 mss = `:00${_mss}`
@@ -21,9 +18,10 @@ export function timeFormat(time: Date | number, ms = true) {
             case "3":
                 mss = `:${_mss}`
                 break
-            }
         }
-    return `${time.getHours() -1 ? ((time.getHours() -1).toString().length == 1 ? `0${time.getHours() -1}:` : `${time.getHours() -1  }:`) : ''}${time.getMinutes() ? (time.getMinutes().toString().length == 1 ? `0${time.getMinutes()}` : time.getMinutes()) : '00'}:${time.getSeconds().toString().length == 1 ? `0${time.getSeconds()}` : time.getSeconds()}${ms ? mss : ''}`
+    }
+    
+    return `${t.getUTCHours() ? `0${t.getUTCHours()}:` : ``}${t.getUTCMinutes() ? (t.getUTCMinutes().toString().length == 1 ? `0${t.getUTCMinutes()}` : t.getUTCMinutes()) : '00'}:${t.getUTCSeconds().toString().length == 1 ? `0${t.getUTCSeconds()}` : t.getUTCSeconds()}${ms ? mss : ''}`
 }
 
 export function useGlobalListener<K extends keyof WindowEventMap>(type:K, handler:(e:WindowEventMap[K]) => void, capture = false, passive = false) {
@@ -35,4 +33,9 @@ export function useGlobalListener<K extends keyof WindowEventMap>(type:K, handle
       addEventListener(type, proxy, opts);
       return () => removeEventListener(type, proxy, opts);
     }, [type, capture, passive, proxy]);
+}
+
+export function newUTCTime() {
+    const now = new Date();
+    return new Date(now.getTime() + now.getTimezoneOffset() * 60 * 1000);   
 }

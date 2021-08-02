@@ -38,13 +38,20 @@
 
 .gameBoard {
     flex: 0 0 auto;
-    width: 60%;
+    width: 57%;
     display: flex;
     flex-direction: column;
     min-width: 500px;
     min-height: 452px;
     max-height: 100vh;
     max-width: 100vw;
+    margin-right: 2%;
+}
+
+@media (max-width: 1305px) {
+    .gameBoard {
+        width: 80%;
+    }
 }
 
 .gameBoard > div {

@@ -3,23 +3,29 @@
     width: 80%;
     max-height: 98%;
 }
+
 .gameCard {
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 6px;
-    width: 11vw;
+    /* width: 11vw; */
+    flex: 1 1 0;
     height: 31vh;
     min-width: 80px;
     min-height: 100px;
     margin-left: 4px;
-    /* todo remake proportions,
-        also set it to keep them during rescaling
+    /* 
+    todo remake proportions,
+    also set it to keep them during rescaling
     */
     justify-content: center;
     overflow-y: hidden;
-    background: var(--ico);
     transition: box-shadow 0.15s linear;
+}
+
+.gameCardNormal {
+    background: var(--ico);
 }
 
 .cardSelected {

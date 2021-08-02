@@ -1,7 +1,6 @@
 import { Fragment, h, FunctionComponent } from "preact"
 import SetCardGen from "../cards/setcard"
 import { setCard } from "../gameHelper"
-import style from "./style.css"
 // todo for V1:
 // - multiplayer
 // - full mobile support (through using css, not device detect)
@@ -37,10 +36,12 @@ const GameBoard:FunctionComponent<PropsG> = ({rawBoard, cols, selectedCards, sel
                 {row.map((card) => {if (!card) return
                     return <SetCardGen key={card} card={card} onClick={(e) => {if (e.button == 0) selectF(card)}} selected={selectedCards.includes(card)} />
                 })}
+                {row.length == 4 ? <SetCardGen onClick={() => {return}} card="ghost" selected={false} /> : <Fragment />}
                 </div>
             )
         })
-    } </Fragment>
+    } 
+    </Fragment>
 }
 
 export default GameBoard

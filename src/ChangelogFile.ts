@@ -174,5 +174,28 @@ export default [
         removed: [
 
         ]
+    },{
+        version: "0.6.1",
+        updateName: "Small patches & looks",
+        added: [
+            "Auto hiding the big livesplit bar"
+        ],
+        changed: [
+            "Now this project uses the more modern preact config for typescript",
+            "'Mobile detection' is now reworked to use screen size",
+            "The cards are now evenly sized using flex rather than view with",
+            "totTime has been changed to timeStarted for ease of understanding",
+            "There is a seperate element for the splitLine"
+        ],
+        fixed: [
+            "The livesplit bar is now evenly spaced",
+            "All the times are now based on UTC, no matter what timezone you are in, the timezones will not be broken",
+            "Safari now has a propper time implementation",
+        ],
+        removed: [
+            "Support for 'vertical mode'. This will be fixed soon enough",
+            "'Mobile Detection' Module",
+            "The package-lock.json file"
+        ]
     },
 ]

@@ -167,10 +167,15 @@ const Rhombus: FunctionComponent<{card: setCard}> = ({ card }) => {
         </g>
     )
 }
-const SetCardGen: FunctionComponent<{card: setCard, selected: boolean, onClick:(e:h.JSX.TargetedMouseEvent<HTMLDivElement>) => void}> = ({card, selected, onClick}) => (
-    <div class={`${style.gameCard} ${selected ? style.cardSelected : ''}`} id={card} onClick={onClick}>
-    <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 210 300">{card[1] == 'o' ? <Oval card={card} /> : card[1] == 'r' ? <Rhombus card={card} /> : <Squigly card={card} />}</svg>
-    </div>
-)
+const SetCardGen: FunctionComponent<{card: setCard | "ghost", selected: boolean, onClick:(e:h.JSX.TargetedMouseEvent<HTMLDivElement>) => void}> = ({card, selected, onClick}) => {
+    if (card == "ghost") {
+        return (
+            <div class={style.gameCard} />
+        )
+    }
+    return (<div class={`${style.gameCard} ${style.gameCardNormal} ${selected ? style.cardSelected : ''}`} id={card} onClick={onClick}>
+        <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 210 300">{card[1] == 'o' ? <Oval card={card} /> : card[1] == 'r' ? <Rhombus card={card} /> : <Squigly card={card} />}</svg>
+    </div>)
+}
 
 export default SetCardGen

@@ -34,6 +34,7 @@
       transition: none;
     }
 }
+
 .btn-d {
     background-color: #d42738;
 }
@@ -86,6 +87,31 @@ body {
     font: 500 1rem/1.5 Inter, sans-serif;
     -webkit-text-size-adjust: 100%;
 }
+
+@media (min-width: 1525px) {
+    body {
+        font-size: 16px;
+    }
+}
+
+@media (min-width: 1600px) {
+    body {
+        font-size: 18px;
+    }
+}
+
+@media (min-width: 1675px) {
+    body {
+        font-size: 20px;
+    }
+}
+
+@media (min-width: 1750px) {
+    body {
+        font-size: 22px;
+    }
+}
+
 h1 {
     font-size: 2.7rem;
 }
@@ -108,7 +134,6 @@ button {
     width: 0px;
 }
 
-
-/* After this line, all the css can be split into further files */
-
-
+.w100 {
+    width: 100%;
+}

@@ -1,6 +1,6 @@
-import { FunctionComponent, h} from "preact"
+import { Fragment, FunctionComponent, h} from "preact"
 import { useEffect, useRef, useState } from "preact/hooks"
-import { timeFormat } from "../../tools"
+import { newUTCTime, timeFormat } from "../../tools"
 import { Split } from "../gameHelper"
 import style from "./style.css"
 
@@ -8,9 +8,10 @@ type Props = {
     splits: Split[];
     splitName: string;
     done: {[key: string]: number};
-    totTime: number;
+    timeStarted: number;
 }
-const LiveSplit:FunctionComponent<Props> = ({splitName, done, splits, totTime}) => {
+
+const LiveSplit:FunctionComponent<Props> = ({splitName, done, splits, timeStarted}) => {
     const [ burner, setBurner ] = useState(false);
     const burnRef = useRef<NodeJS.Timeout>();
     useEffect(() => {
@@ -22,35 +23,45 @@ const LiveSplit:FunctionComponent<Props> = ({splitName, done, splits, totTime}) 
         };
     }, [ burnRef, setBurner, burner ]);
 
-    const time = Date.now()
+    const time = newUTCTime().getTime()    
+
     let tottime = 0
+
     return (
         <div class={style.timerWrapper}>
             <div class={style.timerHeading}>
-                Set Game <i>Speedrun</i>
+                <h2>
+                    Set Game <i>Speedrun</i>
+                </h2>
             </div>
-        {
-            splits.map((val) => {
-                const donezo = done[val.name]
-                const displaytime = donezo ? true : val.name == splitName
-                const timetodisplay = donezo ? donezo : time - totTime
+            <div class={style.splitWrapper}>
+                {
+                    splits.map((val) => {
+                        const donezo = done[val.name]
+                        const displaytime = donezo ? true : val.name == splitName
+                        const timetodisplay = donezo ? donezo : time - timeStarted
 
-                tottime+=val.best
-                return <div key={val.name} class={style.timerRow} style={splits.indexOf(val) == (splits.length - 1) ? {borderBottom: 0, margin: 0} : {}}>
-                    <div class={style.timerTName}>
-                        {val.name}
-                    </div>
-                    <div class={style.timerTTime} style={{color: timetodisplay > tottime ? "red" : "green"}}>
-                        {displaytime ? (tottime < timetodisplay ? "+" : "-") + timeFormat(Math.abs(tottime - timetodisplay)) : ""}
-                    </div>
-                    <div class={style.timerTBest}>
-                        {timeFormat(tottime)}
-                    </div>
-                </div>
-            })
-        }
+                        tottime+=val.best
+                        
+                        return <Fragment key={val.name}>
+                            <div class={style.timerRow} style={splits.indexOf(val) == (splits.length - 1) ? {borderBottom: 0, margin: 0} : {}}>
+                                <div class={style.timerTName}>
+                                    {val.name}
+                                </div>
+                                <div class={style.timerTTime} style={{color: timetodisplay > tottime ? "red" : "green"}}>
+                                    {displaytime ? (tottime < timetodisplay ? "+" : "-") + timeFormat(Math.abs(tottime - timetodisplay)) : ""}
+                                </div>
+                                <div class={style.timerTBest}>
+                                    {timeFormat(tottime)}
+                                </div>
+                            </div>
+                            <div class={style.splitLine} />
+                        </Fragment> 
+                    })
+                }
+            </div>
         <div class={style.timerRow} style={{borderBottom: 0, margin: 0, flexDirection:"row-reverse", textAlign: "right"}}>
-            <h1 style={{display: "flex", }}>{timeFormat(Object.keys(done).includes('Game finished') ? done['Game finished'] : (time - totTime))}</h1>
+            <h1 style={{display: "flex", }}>{timeFormat(Object.keys(done).includes('Game finished') ? done['Game finished'] : (time - timeStarted))}</h1>
         </div>
     </div>
     )

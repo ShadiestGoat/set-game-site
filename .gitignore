@@ -106,3 +106,5 @@ dist
 # Build Dir
 build/
 size-plugin.json
+
+package-lock.json
