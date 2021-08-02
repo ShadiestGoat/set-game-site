@@ -19,7 +19,7 @@ const LiveSplit:FunctionComponent<Props> = ({splitName, done, splits, timeStarte
             setBurner(!burner);
         }, 59);
         return () => {
-            clearInterval(burnRef.current);
+            clearInterval(burnRef.current as NodeJS.Timeout);
         };
     }, [ burnRef, setBurner, burner ]);
 
