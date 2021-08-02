@@ -9,7 +9,7 @@ Setting this bad boy up is really simple actually.
 ```sh
 git clone https://github.com/ShadiestGoat/set-game-site.git
 cd set-game-site
-npm i -d
+npm i -D
 ```
 Now you have cloned this repo, and installed all dependoncies. If you will be changing the code to this project, or doing any sort of development, run `npm run dev`, which watches the files for changes. If you want to run this of your website as is, then just:
 
