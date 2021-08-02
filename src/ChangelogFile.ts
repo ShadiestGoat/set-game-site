@@ -1,4 +1,11 @@
-export default [
+const changes:{
+    version:`${number}.${number}.${number}`, 
+    updateName: string, 
+    added:string[]
+    changed: string[],
+    fixed: string[],
+    removed: string[]
+}[] = [
     {
         version: '0.0.0',
         updateName: 'Initial Release',
@@ -197,5 +204,21 @@ export default [
             "'Mobile Detection' Module",
             "The package-lock.json file"
         ]
-    },
+    },{
+        version: '0.6.2',
+        updateName: '',
+        added: [
+
+        ],
+        changed: [
+            "Some modules are now in devDependencies"
+        ],
+        fixed: [
+        ],
+        removed: [
+            "Unused modules"
+        ]
+    }
 ]
+
+export default changes
