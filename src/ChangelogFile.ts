@@ -211,9 +211,13 @@ const changes:{
 
         ],
         changed: [
-            "Some modules are now in devDependencies"
+            "Some modules are now in devDependencies",
+            "Width and Height of cards have been changed to use flex more",
+            "The 'home' button now follows the style of the other buttons more",
+            "The use of the 'vertical' state is no more. A height state is used"
         ],
         fixed: [
+            "The info on the left column now auto hides on small screen sizes"
         ],
         removed: [
             "Unused modules"

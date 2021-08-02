@@ -174,7 +174,7 @@ const SingleGame: FunctionComponent = ({}) => {
     const [gameInfo, setGameInfo] = useState<fakeState['gameInfo']>(initialInfo.gameInfo)
     const [speedrunInfo, setSpeedrunInfo] = useState<fakeState['speedrun']>(initialInfo.speedrun)
     const [bigLivesplit, setBigLivesplit] = useState<boolean>(window.innerWidth >= LIVESPLIT_SCREENSIZE_MIN)
-    const [vertical, setVertical] = useState<boolean>(window.innerHeight >= window.innerWidth)
+    const [hh, setHH] = useState<number>(window.innerHeight)
     const win = useCallback(() => {
         const time = newUTCTime()
         const totTime = time.getTime() - speedrunInfo.timeStarted.getTime()
@@ -312,15 +312,11 @@ const SingleGame: FunctionComponent = ({}) => {
             handleSetSelector(card)
         }
     })
-    useGlobalListener('resize', (e) => {
+    useGlobalListener('resize', () => {
         if (window.innerWidth <= LIVESPLIT_SCREENSIZE_MIN) setBigLivesplit(false)
         else setBigLivesplit(true)
-        
-        if (window.innerHeight >= window.innerWidth) setVertical(true)
-        else setVertical(false)
-
+        setHH(window.innerHeight)
     })
-
     return (
         <div class={style.gameContainer}>
         <SvgDefs />
@@ -331,7 +327,7 @@ const SingleGame: FunctionComponent = ({}) => {
             <meta content="#6d10ff" data-react-helmet="true" name="theme-color" />
         </Helmet>
     {
-        vertical ?
+        hh > window.innerWidth ?
             gameInfo.won ?
             <div />
             : <div class={style.boardGameWrapper}>
@@ -343,8 +339,7 @@ const SingleGame: FunctionComponent = ({}) => {
                 <h1 style={{
                     fontSize: "50px"
                 }}>Set!</h1>
-                
-                <div style={{}}>
+                <div>
                     <h2>Found sets: {gameInfo.setsFound.length}</h2>
                     <h2>Wrong Guesses: {gameInfo.wrongs}</h2>
                     <h2>Deck: {gameInfo.deck.length}</h2>
@@ -422,10 +417,16 @@ const SingleGame: FunctionComponent = ({}) => {
                 : <div class={style.boardGameWrapper}>
                         <div class={style.extraCol}>
                             <h1>Set!</h1>
-                            <p>Found sets: {gameInfo.setsFound.length}</p>
-                            <p>Wrong Guesses: {gameInfo.wrongs}</p>
-                            <p>Deck: {gameInfo.deck.length}</p>
-                            <p class={`${gameInfo.hints ? 'text-danger' : ''}`}>Hints used: {gameInfo.hints}</p>
+                            {
+                                hh >= 380 ? 
+                                    <Fragment>
+                                        <h4>Found sets: {gameInfo.setsFound.length}</h4>
+                                        <h4>Wrong Guesses: {gameInfo.wrongs}</h4>
+                                        <h4>Deck: {gameInfo.deck.length}</h4>
+                                        <h4 class={`${gameInfo.hints ? 'text-danger' : ''}`}>Hints used: {gameInfo.hints}</h4>
+                                    </Fragment> :
+                                <Fragment />
+                            }
                             <button class={`btn btn-d`} onClick={(e) => {
                                 if (e.button == 0) {
                                     const info = initerCB()
@@ -471,7 +472,7 @@ const SingleGame: FunctionComponent = ({}) => {
                                     }}>Change Type</button>
                                 </Fragment> : <Fragment />
                             }
-                            <Link href="/" class="btn btn-d" style={{textDecoration: "none", borderRadius: "50%", padding: '0px', width: "6vw", height: "6vw", display: "flex", alignItems: "center", justifyContent: "center", margin: "auto auto", marginTop: "4vh"}}>
+                            <Link href="/" class="btn btn-d" style={{textDecoration: "none", padding: 0, width: "9vw", height: "6vw", display: "flex", alignItems: "center", justifyContent: "center", margin: "auto auto", marginTop: "4vh"}}>
                                 Home
                             </Link>
                         </div>

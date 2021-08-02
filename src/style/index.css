@@ -88,27 +88,33 @@ body {
     -webkit-text-size-adjust: 100%;
 }
 
-@media (min-width: 1525px) {
+@media (min-width: 1300px) {
     body {
         font-size: 16px;
     }
 }
 
-@media (min-width: 1600px) {
-    body {
-        font-size: 18px;
-    }
-}
-
-@media (min-width: 1675px) {
+@media (min-width: 1525px) {
     body {
         font-size: 20px;
     }
 }
 
+@media (min-width: 1600px) {
+    body {
+        font-size: 21px;
+    }
+}
+
+@media (min-width: 1675px) {
+    body {
+        font-size: 23px;
+    }
+}
+
 @media (min-width: 1750px) {
     body {
-        font-size: 22px;
+        font-size: 23px;
     }
 }
 
