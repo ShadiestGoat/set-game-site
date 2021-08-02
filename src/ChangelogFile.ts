@@ -214,7 +214,8 @@ const changes:{
             "Some modules are now in devDependencies",
             "Width and Height of cards have been changed to use flex more",
             "The 'home' button now follows the style of the other buttons more",
-            "The use of the 'vertical' state is no more. A height state is used"
+            "The use of the 'vertical' state is no more. A height state is used",
+            "The livesplit timer also uses the height"
         ],
         fixed: [
             "The info on the left column now auto hides on small screen sizes"

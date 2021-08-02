@@ -12,7 +12,9 @@ const cookies = new Cookies();
 // import generalStyle from "../../style/index.css"
 import style from "./style.css"
 
-const LIVESPLIT_SCREENSIZE_MIN = 1305
+const LIVESPLIT_SCREENSIZE_W_MIN = 1305
+const LIVESPLIT_SCREENSIZE_H_MIN = 500
+
 
 type fakeState = {
     gameInfo: {
@@ -173,7 +175,7 @@ const SingleGame: FunctionComponent = ({}) => {
     const initialInfo = useMemo(initer, [])
     const [gameInfo, setGameInfo] = useState<fakeState['gameInfo']>(initialInfo.gameInfo)
     const [speedrunInfo, setSpeedrunInfo] = useState<fakeState['speedrun']>(initialInfo.speedrun)
-    const [bigLivesplit, setBigLivesplit] = useState<boolean>(window.innerWidth >= LIVESPLIT_SCREENSIZE_MIN)
+    const [bigLivesplit, setBigLivesplit] = useState<boolean>(window.innerWidth >= LIVESPLIT_SCREENSIZE_W_MIN && window.innerHeight >= LIVESPLIT_SCREENSIZE_H_MIN)
     const [hh, setHH] = useState<number>(window.innerHeight)
     const win = useCallback(() => {
         const time = newUTCTime()
@@ -313,8 +315,7 @@ const SingleGame: FunctionComponent = ({}) => {
         }
     })
     useGlobalListener('resize', () => {
-        if (window.innerWidth <= LIVESPLIT_SCREENSIZE_MIN) setBigLivesplit(false)
-        else setBigLivesplit(true)
+        setBigLivesplit(window.innerWidth >= LIVESPLIT_SCREENSIZE_W_MIN && window.innerHeight >= LIVESPLIT_SCREENSIZE_H_MIN)
         setHH(window.innerHeight)
     })
     return (
@@ -472,7 +473,7 @@ const SingleGame: FunctionComponent = ({}) => {
                                     }}>Change Type</button>
                                 </Fragment> : <Fragment />
                             }
-                            <Link href="/" class="btn btn-d" style={{textDecoration: "none", padding: 0, width: "9vw", height: "6vw", display: "flex", alignItems: "center", justifyContent: "center", margin: "auto auto", marginTop: "4vh"}}>
+                            <Link href="/" class="btn btn-d" style={{textDecoration: "none", padding: 0, width: "9vw", height: "8vh", display: "flex", alignItems: "center", justifyContent: "center", margin: "auto auto", marginTop: "2vh"}}>
                                 Home
                             </Link>
                         </div>
