@@ -177,6 +177,7 @@ const SingleGame: FunctionComponent = ({}) => {
     const [speedrunInfo, setSpeedrunInfo] = useState<fakeState['speedrun']>(initialInfo.speedrun)
     const [bigLivesplit, setBigLivesplit] = useState<boolean>(window.innerWidth >= LIVESPLIT_SCREENSIZE_W_MIN && window.innerHeight >= LIVESPLIT_SCREENSIZE_H_MIN)
     const [hh, setHH] = useState<number>(window.innerHeight)
+    const [ww, setWW] = useState<number>(window.innerWidth)
     const win = useCallback(() => {
         const time = newUTCTime()
         const totTime = time.getTime() - speedrunInfo.timeStarted.getTime()
@@ -317,6 +318,7 @@ const SingleGame: FunctionComponent = ({}) => {
     useGlobalListener('resize', () => {
         setBigLivesplit(window.innerWidth >= LIVESPLIT_SCREENSIZE_W_MIN && window.innerHeight >= LIVESPLIT_SCREENSIZE_H_MIN)
         setHH(window.innerHeight)
+        setWW(window.innerWidth)
     })
     return (
         <div class={style.gameContainer}>
@@ -328,7 +330,7 @@ const SingleGame: FunctionComponent = ({}) => {
             <meta content="#6d10ff" data-react-helmet="true" name="theme-color" />
         </Helmet>
     {
-        hh > window.innerWidth ?
+        hh > ww ?
             gameInfo.won ?
             <div />
             : <div class={style.boardGameWrapper}>
