@@ -23,7 +23,7 @@ const LiveSplit:FunctionComponent<Props> = ({splitName, done, splits, timeStarte
         };
     }, [ burnRef, setBurner, burner ]);
 
-    const time = newUTCTime().getTime()    
+    const time = newUTCTime().getTime()
 
     let tottime = 0
 
@@ -42,7 +42,7 @@ const LiveSplit:FunctionComponent<Props> = ({splitName, done, splits, timeStarte
                         const timetodisplay = donezo ? donezo : time - timeStarted
 
                         tottime+=val.best
-                        
+
                         return <Fragment key={val.name}>
                             <div class={style.timerRow} style={splits.indexOf(val) == (splits.length - 1) ? {borderBottom: 0, margin: 0} : {}}>
                                 <div class={style.timerTName}>
@@ -56,7 +56,7 @@ const LiveSplit:FunctionComponent<Props> = ({splitName, done, splits, timeStarte
                                 </div>
                             </div>
                             <div class={style.splitLine} />
-                        </Fragment> 
+                        </Fragment>
                     })
                 }
             </div>

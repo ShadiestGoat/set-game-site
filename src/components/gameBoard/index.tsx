@@ -40,7 +40,7 @@ const GameBoard:FunctionComponent<PropsG> = ({rawBoard, cols, selectedCards, sel
                 </div>
             )
         })
-    } 
+    }
     </Fragment>
 }
 

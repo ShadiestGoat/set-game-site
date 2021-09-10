@@ -144,7 +144,7 @@ const SingleGame: FunctionComponent = ({}) => {
             board = NewBoardData.board
             cols = NewBoardData.cols
         }
-        
+
         return {
             gameInfo: {
                 deck: curDeck,
@@ -214,7 +214,7 @@ const SingleGame: FunctionComponent = ({}) => {
 
     const handleSetSelector = useCallback((card:setCard) => {
         const nSpeedrun = speedrunInfo
-        const nGame = gameInfo 
+        const nGame = gameInfo
         // select the card
         if (nGame.selectedCards.includes(card)) nGame.selectedCards.splice(nGame.selectedCards.indexOf(card), 1)
         else nGame.selectedCards.push(card)
@@ -364,7 +364,7 @@ const SingleGame: FunctionComponent = ({}) => {
                             setSpeedrunInfo(info.speedrun)
                         }
                     }} title="Restart the game (r)" >Restart</button>
-                    <div 
+                    <div
                         style={{
                             flex: "0 0 auto",
                             width: "2%"
@@ -421,7 +421,7 @@ const SingleGame: FunctionComponent = ({}) => {
                         <div class={style.extraCol}>
                             <h1>Set!</h1>
                             {
-                                hh >= 380 ? 
+                                hh >= 380 ?
                                     <Fragment>
                                         <h4>Found sets: {gameInfo.setsFound.length}</h4>
                                         <h4>Wrong Guesses: {gameInfo.wrongs}</h4>
@@ -499,6 +499,5 @@ const SingleGame: FunctionComponent = ({}) => {
             </div>
         )
 }
-
 
 export default SingleGame

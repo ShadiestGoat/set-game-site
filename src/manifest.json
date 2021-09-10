@@ -3,8 +3,9 @@
   "short_name": "Shady Set",
   "start_url": "/",
   "display": "standalone",
-  "orientation": "horizontal",
+  "orientation": "portrait",
   "theme_color": "#6d10ff",
+  "background_color": "#202124",
   "icons": [
     {
       "src": "/assets/icons/android-chrome-192x192.png",
@@ -14,7 +15,8 @@
     {
       "src": "/assets/icons/android-chrome-512x512.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "maskable"
     },
     {
       "src": "/assets/icons/favicon-16x16.png",

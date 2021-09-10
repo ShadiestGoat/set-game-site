@@ -1,6 +1,6 @@
 const changes:{
-    version:`${number}.${number}.${number}`, 
-    updateName: string, 
+    version:`${number}.${number}.${number}`,
+    updateName: string,
     added:string[]
     changed: string[],
     fixed: string[],

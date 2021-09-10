@@ -5,6 +5,7 @@ const width = '2'
 const height = '1'
 const transform = 'matrix(-4,0,0,10,-4,-10)'
 const trans1 = 'translate(0,0) scale(10,10)'
+
 export const SvgDefs: FunctionComponent = () => (<svg width="0" height='0'>
     <defs>
         <pattern

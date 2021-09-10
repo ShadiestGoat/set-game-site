@@ -6,7 +6,7 @@ export type Fill = 'f' | 'e' | 's'
 
 export const colorMap:{[key:string]:string} = {
     r: '#bd0000',
-    p: '#761068', //todo make new color
+    p: '#6e1f64', //todo make new color
     g: '#00aa00'
 }
 

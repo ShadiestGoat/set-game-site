@@ -42,7 +42,7 @@
 .splitLine {
     height: 1px;
     border-bottom: 2px dashed darkgrey;
-} 
+}
 
 .splitWrapper {
     height: 82%;
@@ -50,4 +50,3 @@
     flex-direction: column;
     justify-content: space-between;
 }
-
