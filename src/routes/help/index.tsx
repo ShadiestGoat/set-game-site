@@ -10,7 +10,43 @@ const DisplaySetCard:FunctionComponent<{card: setCard}> = ({card}) => <SetCardGe
 const HelpPage:FunctionComponent = () => {
     return <Fragment>
         <NavBar page="help" />
-        <h1>Todo!</h1>
+        <h1 style={{marginTop: "5vh"}}>Help</h1>
+        <div class={style.row}>
+            <div class={style.col} style={{width: "60vw"}}>
+                <h4 style={{marginTop: "5vh", lineHeight: "4vh"}}>
+                Your goal is to collect all sets possible, as fast as possible. <br />
+                A 'set' is a group of 3 cards that have no odd one out. To find one,<br />
+                you need to look at the 4 properties of the cards: Number, Shape, Color and Filling.<br />
+                The basic rule is that if 2 cards share a property, then the other one must have that property too.<br />
+                The cards will be presented on a board 3x4. If there isn't a set within those 12 cards,<br />
+                another column will be added. This means there is always a set,<br />
+                you just gotta find it!
+                </h4>
+            </div>
+            <div class={style.col}>
+                <div class={style.row} style={{
+                boxShadow: "0 0 20px 2px #18f018, inset 0 0 12px 0px #18f018",
+                borderRadius: "6.25px",
+                padding: "4px 4px 4px 0px",
+                border: "3px solid white"
+                }}>
+                    <DisplaySetCard card="1orf" />
+                    <DisplaySetCard card="2orf" />
+                    <DisplaySetCard card="3orf" />
+                </div>
+                <div class={style.row} style={{
+                boxShadow: "0 0 20px 2px #e42134, inset 0 0 12px 0px #e42134",
+                borderRadius: "6.25px",
+                padding: "4px 4px 4px 0px",
+                border: "3px solid white",
+                marginTop: "2vh",
+                }}>
+                    <DisplaySetCard card="1wrf" />
+                    <DisplaySetCard card="1orf" />
+                    <DisplaySetCard card="1rgf" />
+                </div>
+            </div>
+        </div>
     </Fragment>
 }
 

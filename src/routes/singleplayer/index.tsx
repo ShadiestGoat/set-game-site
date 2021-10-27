@@ -7,9 +7,6 @@ import { SvgDefs } from "../../components/cards/svgDefs"
 import GameBoard from "../../components/gameBoard"
 import { FullDeck, keyMap, setCard, Split, splitsB, splitsE } from "../../components/gameHelper"
 import LiveSplit from "../../components/livesplit"
-import Cookies from 'universal-cookie';
-const cookies = new Cookies();
-// import generalStyle from "../../style/index.css"
 import style from "./style.css"
 
 const LIVESPLIT_SCREENSIZE_W_MIN = 1305
@@ -145,6 +142,19 @@ const SingleGame: FunctionComponent = ({}) => {
             cols = NewBoardData.cols
         }
 
+        let BeginnerSplits:Split[]
+        try {
+            BeginnerSplits = JSON.parse(localStorage.getItem('BeginnerSplits') ?? JSON.stringify(splitsB))
+        } catch {
+            BeginnerSplits = splitsB
+        }
+        let ExpertSplits:Split[]
+        try {
+            ExpertSplits = JSON.parse(localStorage.getItem('ExpertSplits') ?? JSON.stringify(splitsE))
+        } catch {
+            ExpertSplits = splitsE
+        }
+
         return {
             gameInfo: {
                 deck: curDeck,
@@ -161,14 +171,14 @@ const SingleGame: FunctionComponent = ({}) => {
                 timeFin: false,
                 oldDClock: "NH",
                 splits: {
-                    BeginnerSplits: cookies.get('BeginnerSplits') ?? splitsB,
-                    ExpertSplits: cookies.get('ExpertSplits') ?? splitsE,
+                    BeginnerSplits,
+                    ExpertSplits,
                     CurSplitName: splitsB[0].name,
                     doneSplits: {}
                 },
                 oldSplits: false,
-                displayClock: (cookies.get('displayClock') ?? "true") == 'true',
-                timerMode: cookies.get('timerMode') ?? "Beginner",
+                displayClock: (localStorage.getItem('displayClock') ?? "true") == "true",
+                timerMode: localStorage.getItem('timerMode') == "Expert" ? "Expert" : "Beginner", //default to beginner
             },
         }
     }
@@ -205,8 +215,8 @@ const SingleGame: FunctionComponent = ({}) => {
         }
         splits.doneSplits = {}
         nSpeedrun.splits = splits
-        cookies.set('BeginnerSplits', splits.BeginnerSplits)
-        cookies.set('ExpertSplits', splits.ExpertSplits)
+        localStorage.setItem('BeginnerSplits', JSON.stringify(splits.BeginnerSplits))
+        localStorage.setItem('ExpertSplits', JSON.stringify(splits.ExpertSplits))
 
         setGameInfo({...nGame})
         setSpeedrunInfo({...nSpeedrun})
@@ -465,12 +475,12 @@ const SingleGame: FunctionComponent = ({}) => {
                                         const nSpeedrun = speedrunInfo
                                         nSpeedrun.displayClock = !nSpeedrun.displayClock
                                         setSpeedrunInfo({...nSpeedrun})
-                                        cookies.set('displayClock', nSpeedrun.displayClock, { path: '/s', });
+                                        localStorage.setItem('displayClock', nSpeedrun.displayClock ? "true" : "false");
                                     }}>Toggle Clock</button>
                                     <button class="btn btn-p" onClick={(e) => {if (e.button != 0) return;
                                         const nSpeedrun = speedrunInfo
                                         nSpeedrun.timerMode = nSpeedrun.timerMode == "Beginner" ? "Expert" : "Beginner"
-                                        cookies.set('timerMode', nSpeedrun.timerMode, { path: '/s', });
+                                        localStorage.setItem('timerMode', nSpeedrun.timerMode);
                                         setSpeedrunInfo({...nSpeedrun})
                                     }}>Change Type</button>
                                 </Fragment> : <Fragment />

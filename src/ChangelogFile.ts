@@ -206,7 +206,7 @@ const changes:{
         ]
     },{
         version: '0.6.2',
-        updateName: '',
+        updateName: 'Comfy looks',
         added: [
 
         ],
@@ -222,6 +222,23 @@ const changes:{
         ],
         removed: [
             "Unused modules"
+        ]
+    },{
+        version: '0.7.0',
+        updateName: 'PWA Improvements',
+        added: [
+            "The Help page!"
+        ],
+        changed: [
+            "PWA uses landscape now!",
+            "Now we use localStorage rather than cookies!",
+            "PWA Now starts on the single play by default!"
+        ],
+        fixed: [
+            "Issue with reloading & the options",
+            "The absence of an update name for V0.6.2"
+        ],
+        removed: [
         ]
     }
 ]
