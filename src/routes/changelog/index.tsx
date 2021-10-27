@@ -26,7 +26,7 @@ const ChangelogPage: FunctionComponent = () => (
     <Helmet>
         <meta content="The set game, recreated by Shady Goat" property="og:title" />
         <meta content="This is the fun card game 'SET', but recreated as a website made with preact. " property="og:description" />
-        <meta content="https://set.shadygoat.eu" property="og:url" />
+        <meta content="/" property="og:url" />
         <meta content="#6d10ff" data-react-helmet="true" name="theme-color" />
     </Helmet>
     <NavBar page="changes" />

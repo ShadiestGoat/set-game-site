@@ -243,6 +243,18 @@ const changes:{
             "Unused modules",
             "Vendor specific css. PostCss should do that from now on!"
         ]
+    },{
+        version: '0.7.1',
+        updateName: 'Cache ? More like... Cache!',
+        added: [
+        ],
+        changed: [
+        ],
+        fixed: [
+            "You are now forced to update if there is an update fully available. No more annoying cache!",
+        ],
+        removed: [
+        ]
     }
 ]
 
