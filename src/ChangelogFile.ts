@@ -232,13 +232,16 @@ const changes:{
         changed: [
             "PWA uses landscape now!",
             "Now we use localStorage rather than cookies!",
-            "PWA Now starts on the single play by default!"
+            "PWA Now starts on the single play by default!",
+            "Display is now fullscreen, so now more annoying android ui in the way!"
         ],
         fixed: [
             "Issue with reloading & the options",
             "The absence of an update name for V0.6.2"
         ],
         removed: [
+            "Unused modules",
+            "Vendor specific css. PostCss should do that from now on!"
         ]
     }
 ]

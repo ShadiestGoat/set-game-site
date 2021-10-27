@@ -2,7 +2,7 @@
   "name": "Shady SET",
   "short_name": "SET",
   "start_url": "/s",
-  "display": "standalone",
+  "display": "fullscreen",
   "orientation": "landscape",
   "theme_color": "#6d10ff",
   "background_color": "#202124",
