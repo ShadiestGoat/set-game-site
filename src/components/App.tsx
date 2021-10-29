@@ -21,7 +21,6 @@ const App: FunctionalComponent = () => {
         }})}).catch(
             () => console.log("Failed to check for updates... check your connection!")
         )
-
     return (
         <div id="preact_root">
             <Router>

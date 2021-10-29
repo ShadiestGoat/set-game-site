@@ -1,6 +1,7 @@
 {
   "name": "Shady SET",
   "short_name": "SET",
+  "description": "This is the fun card game 'SET', but recreated as a website made with preact",
   "start_url": "/s",
   "display": "fullscreen",
   "orientation": "landscape",
