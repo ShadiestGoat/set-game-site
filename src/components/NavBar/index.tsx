@@ -27,7 +27,7 @@ export const NavBar: FunctionComponent<{page: CurPages}> = ({page}) => {
                     <Link class={style.navLink + activeMaker('changes')} href="/changelog">Changelog</Link>
                 </li>
                 <li class={style.navItem}>
-                    <Link class={style.navLink} href="https://shadygoat.eu">Author</Link>
+                    <a class={style.navLink} href="https://shadygoat.eu" target="_blank" rel="noopener noreferrer">Author</a>
                 </li>
             </ul>
         </div>
