@@ -19,7 +19,7 @@ const IndexPage:FunctionComponent = () => (<Fragment>
         num={75}
         color="#3178c6"
         />
-        <h1 style={{marginTop: "31vh"}} class={`fadeIn test`} >Set, The Game</h1>
+        <h1 style={{marginTop: "31vh"}} class={`fadeIn`} >Set, The Game</h1>
     </div>
 </Fragment>)
 
